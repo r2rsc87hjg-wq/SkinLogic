@@ -1,0 +1,41 @@
+{
+  "name": "skinclear",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "@portabletext/react": "^3.1.0",
+    "@sanity/client": "^6.19.1",
+    "@sanity/image-url": "^1.0.2",
+    "@supabase/supabase-js": "^2.43.4",
+    "@upstash/ratelimit": "^2.0.1",
+    "@upstash/redis": "^1.31.5",
+    "next": "^16.2.9",
+    "next-sanity": "^9.4.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-markdown": "^9.0.1",
+    "sanity": "^3.50.0",
+    "server-only": "^0.0.1",
+    "stripe": "^16.2.0"
+  },
+  "devDependencies": {
+    "@sanity/vision": "^3.99.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "^16.2.9",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
