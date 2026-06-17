@@ -193,14 +193,14 @@ export async function POST(request: NextRequest) {
       internal,
     })
   } catch (err) {
-    console.error(
-      '[learn-guide] Claude API error:',
-      err instanceof Error ? err.message : 'unknown'
-    )
+    const detail = err instanceof Error ? err.message : String(err)
+    console.error('[learn-guide] Claude API error:', detail)
+    // TEMP DIAGNOSTIC: surface the real error to the client so we can see what
+    // Vercel is hitting. Remove once the root cause is confirmed.
     return NextResponse.json(
       {
         error: 'api_error',
-        message: 'Pip could not answer just now. Please try again.',
+        message: `Pip could not answer just now. (debug: ${detail})`,
       },
       { status: 500 }
     )
