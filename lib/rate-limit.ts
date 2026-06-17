@@ -105,6 +105,15 @@ export function getSubscriberLearnGuideLimiter() {
   })
 }
 
+// Free AI skin analysis — 3 requests per IP per hour (Sonnet vision, so keep low)
+export function getAnalysisLimiter() {
+  return new Ratelimit({
+    redis: getRedis(),
+    limiter: Ratelimit.slidingWindow(3, '1 h'),
+    prefix: 'rl:analysis',
+  })
+}
+
 // Clinics lookup — 20 per hour (no AI cost, but does hit Places API)
 export function getNavigatorClinicsLimiter() {
   return new Ratelimit({

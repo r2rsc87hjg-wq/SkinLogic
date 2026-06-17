@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getLearnGuideLimiter, getSubscriberLearnGuideLimiter, getIp } from '@/lib/rate-limit'
+import { getLearnGuideLimiter, getIp } from '@/lib/rate-limit'
 import { validateLearnGuideInput } from '@/lib/validators'
 import { ARTICLES } from '@/content/learn/articles'
-import { validateSubscriptionToken } from '@/lib/subscription-token'
 
 // Guided Learning ("Learn with Pip") — Claude answers a skincare question with
 // a short, friendly lesson, finds a reputable article on the web, and proposes
@@ -50,16 +49,9 @@ function extractJson(text: string): unknown | null {
 }
 
 export async function POST(request: NextRequest) {
-  // 1. Rate limit — subscribers get a higher ceiling.
+  // 1. Rate limit by IP.
   const ip = getIp(request.headers)
-  const authHeader = request.headers.get('authorization')
-  const rawToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
-  const isSubscriber = rawToken
-    ? Boolean(await validateSubscriptionToken(rawToken).catch(() => null))
-    : false
-
-  const limiter = isSubscriber ? getSubscriberLearnGuideLimiter() : getLearnGuideLimiter()
-  const { success, reset } = await limiter.limit(ip)
+  const { success, reset } = await getLearnGuideLimiter().limit(ip)
   if (!success) {
     const minutes = Math.ceil((reset - Date.now()) / 60000)
     return NextResponse.json(

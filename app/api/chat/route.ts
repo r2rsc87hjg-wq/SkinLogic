@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getChatLimiter, getSubscriberChatLimiter, getIp } from '@/lib/rate-limit'
+import { getChatLimiter, getIp } from '@/lib/rate-limit'
 import { validateChatInput } from '@/lib/validators'
-import { validateSubscriptionToken } from '@/lib/subscription-token'
 
 // Haiku keeps chat costs low while remaining capable for friendly Q&A.
 const CHAT_MODEL = 'claude-haiku-4-5-20251001'
@@ -40,15 +39,8 @@ Skin and mental health are deeply linked. When someone raises stress, anxiety, l
 export async function POST(request: NextRequest) {
   const ip = getIp(request.headers)
 
-  // 1. Check for a valid subscription token — subscribers get a higher limit.
-  const authHeader = request.headers.get('authorization')
-  const rawToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
-  const isSubscriber = rawToken
-    ? Boolean(await validateSubscriptionToken(rawToken).catch(() => null))
-    : false
-
-  const limiter = isSubscriber ? getSubscriberChatLimiter() : getChatLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  // 1. Rate limit by IP.
+  const { success, limit, remaining, reset } = await getChatLimiter().limit(ip)
 
   if (!success) {
     const minutes = Math.ceil((reset - Date.now()) / 60000)

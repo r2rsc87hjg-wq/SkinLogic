@@ -1,15 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
-import {
-  isPipAtLimit,
-  incrementPipUsed,
-  getSubscriptionToken,
-  FREE_PIP_LIMIT,
-  getPipUsed,
-} from '@/lib/free-tier'
-import { PaywallModal } from '@/components/ui/PaywallModal'
 
 interface WebArticle {
   title: string
@@ -42,22 +34,11 @@ export function GuidedLearning() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [showPaywall, setShowPaywall] = useState(false)
-  const [usedCount, setUsedCount] = useState(0)
   const endRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setUsedCount(getPipUsed())
-  }, [])
 
   async function ask(question: string) {
     const q = question.trim()
     if (!q || loading) return
-
-    if (isPipAtLimit()) {
-      setShowPaywall(true)
-      return
-    }
 
     setError('')
 
@@ -65,9 +46,6 @@ export function GuidedLearning() {
     setTurns(nextTurns)
     setInput('')
     setLoading(true)
-
-    incrementPipUsed()
-    setUsedCount((c) => c + 1)
 
     // Compact history for the API: prior user questions + Pip lessons.
     const history = nextTurns
@@ -79,13 +57,9 @@ export function GuidedLearning() {
       )
 
     try {
-      const token = getSubscriptionToken()
       const res = await fetch('/api/learn-guide', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: q, history }),
       })
       const data = await res.json()
@@ -112,13 +86,8 @@ export function GuidedLearning() {
   }
 
   const isEmpty = turns.length === 0
-  const atLimit = isPipAtLimit()
 
   return (
-    <>
-    {showPaywall && (
-      <PaywallModal feature="pip" onClose={() => setShowPaywall(false)} />
-    )}
     <section className="glass iris iris-on relative overflow-hidden rounded-3xl p-6 sm:p-8">
       <div className="relative z-10">
         <div className="mb-5 flex items-center gap-3">
@@ -220,20 +189,12 @@ export function GuidedLearning() {
           </button>
         </form>
 
-        {!getSubscriptionToken() && (
-          <p className="mt-2 text-center text-[0.65rem] text-muted/70">
-            {atLimit
-              ? 'Free sessions used — subscribe for unlimited access'
-              : `${FREE_PIP_LIMIT - usedCount} free session${FREE_PIP_LIMIT - usedCount === 1 ? '' : 's'} remaining`}
-          </p>
-        )}
-        <p className="mt-1 text-center text-[0.7rem] leading-tight text-muted">
+        <p className="mt-2 text-center text-[0.7rem] leading-tight text-muted">
           Educational only — not medical advice. Links open external sites Pip
           found on the web; always check claims against a dermatologist.
         </p>
       </div>
     </section>
-    </>
   )
 }
 

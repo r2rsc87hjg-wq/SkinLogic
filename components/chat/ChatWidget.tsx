@@ -3,14 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { detectEmergency } from '@/lib/emergency-detect'
-import {
-  isChatAtLimit,
-  incrementChatUsed,
-  getSubscriptionToken,
-  FREE_CHAT_LIMIT,
-  getChatUsed,
-} from '@/lib/free-tier'
-import { PaywallModal } from '@/components/ui/PaywallModal'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -37,13 +29,6 @@ export function ChatWidget() {
   const [streaming, setStreaming] = useState(false)
   const [error, setError] = useState('')
   const [showEmergency, setShowEmergency] = useState(false)
-  const [showPaywall, setShowPaywall] = useState(false)
-  const [usedCount, setUsedCount] = useState(0)
-
-  // Sync client state after hydration.
-  useEffect(() => {
-    setUsedCount(getChatUsed())
-  }, [])
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -65,12 +50,6 @@ export function ChatWidget() {
     const trimmed = text.trim()
     if (!trimmed || streaming) return
 
-    // Check free tier before sending.
-    if (isChatAtLimit()) {
-      setShowPaywall(true)
-      return
-    }
-
     setError('')
     if (detectEmergency(trimmed)) setShowEmergency(true)
 
@@ -82,18 +61,10 @@ export function ChatWidget() {
     // Placeholder assistant message we stream tokens into.
     setMessages((m) => [...m, { role: 'assistant', content: '' }])
 
-    // Track usage before the request so failed calls still count.
-    incrementChatUsed()
-    setUsedCount((c) => c + 1)
-
     try {
-      const token = getSubscriptionToken()
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: next }),
       })
 
@@ -139,14 +110,8 @@ export function ChatWidget() {
 
   const isEmpty = messages.length === 0
 
-  const atLimit = isChatAtLimit()
-
   return (
     <>
-      {showPaywall && (
-        <PaywallModal feature="chat" onClose={() => setShowPaywall(false)} />
-      )}
-
       {/* Floating bubble */}
       <button
         type="button"
@@ -281,14 +246,7 @@ export function ChatWidget() {
                 </svg>
               </button>
             </div>
-            {!getSubscriptionToken() && (
-              <p className="px-1 pt-1 text-center text-[0.6rem] text-muted/70">
-                {atLimit
-                  ? 'Free messages used — subscribe to continue'
-                  : `${FREE_CHAT_LIMIT - usedCount} free message${FREE_CHAT_LIMIT - usedCount === 1 ? '' : 's'} remaining`}
-              </p>
-            )}
-            <p className="px-1 pt-0.5 text-center text-[0.65rem] leading-tight text-muted">
+            <p className="px-1 pt-1 text-center text-[0.65rem] leading-tight text-muted">
               Educational only — not medical advice. For diagnosis, see a
               board-certified dermatologist.
             </p>

@@ -1,67 +1,54 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { PaymentStart } from '@/components/analysis/PaymentStart'
-import { formatPrice } from '@/lib/pricing'
+import { AnalysisClient } from '@/components/analysis/AnalysisClient'
 
 export const metadata: Metadata = {
-  title: 'Paid AI Skin Analysis',
+  title: 'Free AI Skin Analysis',
   description:
-    'A single, pay-per-use AI skin analysis. Educational only. Your image and results are never stored.',
+    'Upload a photo for a free AI-powered educational skin analysis. Your image and results are never stored.',
 }
 
 export default function AnalysisPage() {
-  const priceLabel = formatPrice()
-
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
       <header className="mb-8">
-        <p className="eyebrow text-accent mb-3">Pay-per-use · AI analysis</p>
+        <p className="eyebrow text-accent mb-3">Free · AI analysis</p>
         <h1 className="text-4xl font-medium text-ink mb-4">AI Skin Analysis</h1>
         <p className="text-lg text-muted leading-relaxed">
-          Upload one photo and get a single AI-powered, plain-English reading of
-          what’s visible — and what the research says is relevant to it. Like
-          everything here, it’s built to make you a more informed reader, not to
-          sell you products. It explains what it’s seeing and why, including the
+          Upload one photo and get an AI-powered, plain-English reading of
+          what&apos;s visible — and what the research says is relevant to it. Like
+          everything here, it&apos;s built to make you a more informed reader, not to
+          sell you products. It explains what it&apos;s seeing and why, including the
           limits of what a photo can show.
         </p>
       </header>
 
-      {/* Privacy notice — shown BEFORE the payment screen, per spec. */}
+      {/* Privacy notice */}
       <div className="mb-8 p-5 bg-accent-soft border border-accent/20 rounded-xl text-sm text-ink/80 leading-relaxed space-y-1.5">
         <p className="font-semibold text-accent">We do not store your skin data</p>
         <p>
-          We do not store your skin data, images, or analysis results. Your
-          photo is sent straight to the AI model, your result is returned to
+          Your photo is sent straight to the AI model, your result is returned to
           your browser, and both are then gone — they are never written to any
-          database, log, or storage. Your payment is processed securely by
-          Stripe.{' '}
+          database, log, or storage.{' '}
           <a href="/privacy" className="underline font-medium text-accent">
             See our privacy policy
           </a>{' '}
           for full details.
         </p>
-        <p>
-          No account and no email are required. We keep only an anonymous record
-          of the transaction (so we can issue refunds and monitor costs) — never
-          your inputs or outputs.
-        </p>
       </div>
 
-      {/* What you get / how it works */}
-      <div className="mb-8 grid sm:grid-cols-3 gap-4 text-sm">
-        <Step n="1" title="Pay once">
-          {priceLabel} via Stripe. No subscription, no account.
-        </Step>
-        <Step n="2" title="Upload a photo">
+      {/* How it works */}
+      <div className="mb-8 grid sm:grid-cols-2 gap-4 text-sm">
+        <Step n="1" title="Upload a photo">
           JPG, PNG, or WEBP, up to 5&nbsp;MB. Validated before anything else.
         </Step>
-        <Step n="3" title="Get your reading">
+        <Step n="2" title="Get your reading">
           An educational analysis, returned to your browser and never stored.
         </Step>
       </div>
 
       <Suspense>
-        <PaymentStart priceLabel={priceLabel} />
+        <AnalysisClient />
       </Suspense>
 
       <p className="mt-8 text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-6">
