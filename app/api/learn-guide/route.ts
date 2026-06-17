@@ -4,6 +4,9 @@ import { getLearnGuideLimiter, getIp } from '@/lib/rate-limit'
 import { validateLearnGuideInput } from '@/lib/validators'
 import { ARTICLES } from '@/content/learn/articles'
 
+// Pip uses web_search which can take 10–20s — extend beyond Vercel's 10s default.
+export const maxDuration = 60
+
 // Guided Learning ("Learn with Pip") — Claude answers a skincare question with
 // a short, friendly lesson, finds a reputable article on the web, and proposes
 // follow-up questions. Internal hub articles are suggested by slug.
