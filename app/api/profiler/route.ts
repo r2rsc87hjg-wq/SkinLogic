@@ -3,6 +3,8 @@ import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
 import { getProfilerLimiter, getIp } from '@/lib/rate-limit'
 import { validateProfilerInput } from '@/lib/validators'
 
+export const maxDuration = 60
+
 // Slightly higher ceiling than the global default — profiler output
 // is substantive educational content, not a one-liner.
 const PROFILER_MAX_TOKENS = 1500

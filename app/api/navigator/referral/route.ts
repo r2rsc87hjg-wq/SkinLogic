@@ -4,6 +4,8 @@ import { getNavigatorReferralLimiter, getIp } from '@/lib/rate-limit'
 import { validateNavigatorTextInput } from '@/lib/validators'
 import { scrubPII } from '@/lib/pii-scrubber'
 
+export const maxDuration = 60
+
 const MAX_INPUT = 5000
 const MAX_TOKENS = 800
 

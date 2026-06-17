@@ -10,6 +10,8 @@ import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
 import { validateImageFile } from '@/lib/validators'
 import { getAnalysisLimiter, getIp } from '@/lib/rate-limit'
 
+export const maxDuration = 60
+
 const MEDIA_TYPES: Record<string, 'image/jpeg' | 'image/png' | 'image/webp'> = {
   'image/jpeg': 'image/jpeg',
   'image/png': 'image/png',

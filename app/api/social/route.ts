@@ -3,7 +3,10 @@ import type Anthropic from '@anthropic-ai/sdk'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
 import { getSocialLimiter, getIp } from '@/lib/rate-limit'
 import { validateSocialInput } from '@/lib/validators'
+
 import type { SocialContentOutput } from '@/types/social'
+
+export const maxDuration = 60
 
 // Higher ceiling than the profiler — three complete creative formats in one call.
 const SOCIAL_MAX_TOKENS = 4000

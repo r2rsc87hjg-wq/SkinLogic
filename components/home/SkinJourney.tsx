@@ -38,7 +38,7 @@ const STOPS = [
     step: '02',
     label: 'Ingredient Explainer',
     title: 'What ingredients\nactually do.',
-    desc: '30 skincare actives decoded — what the research shows, what the marketing exaggerates, and the honest bottom line on every one.',
+    desc: 'Skincare actives decoded — what the research shows, what the marketing exaggerates, and the honest bottom line on every one.',
     href: '/ingredients',
     cta: 'Read the explainers',
     accent: '#5b8a3c',
@@ -442,7 +442,7 @@ function ParticleField({ accent, stopId }: { accent: string; stopId: string }) {
 // ── Post-journey tool grid ────────────────────────────────────────────────────
 const TOOLS = [
   { href: '/learn', title: 'Learning Hub', desc: 'Structured skincare education sorted by level, with progress tracking.', tag: 'Free' },
-  { href: '/ingredients', title: 'Ingredient Explainer', desc: '30 actives decoded: research vs marketing, honest bottom lines.', tag: 'Free' },
+  { href: '/ingredients', title: 'Ingredient Explainer', desc: 'Actives decoded: research vs marketing, honest bottom lines.', tag: 'Free' },
   { href: '/sunscreen', title: 'Sunscreen Guide', desc: 'How sunscreen works, the US vs EU gap, and how to get real protection.', tag: 'Free' },
   { href: '/app-scanner-comparison', title: 'App & Scanner Audit', desc: 'What skincare apps really do vs what they claim.', tag: 'Free' },
   { href: '/profiler', title: 'Skin Profile Educator', desc: 'Research translated to what matters for your specific skin profile.', tag: 'AI' },

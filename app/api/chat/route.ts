@@ -3,6 +3,8 @@ import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
 import { getChatLimiter, getIp } from '@/lib/rate-limit'
 import { validateChatInput } from '@/lib/validators'
 
+export const maxDuration = 60
+
 // Haiku keeps chat costs low while remaining capable for friendly Q&A.
 const CHAT_MODEL = 'claude-haiku-4-5-20251001'
 const CHAT_MAX_TOKENS = 500
