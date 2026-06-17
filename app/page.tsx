@@ -69,12 +69,6 @@ const PRINCIPLES = [
 
 const SOURCES = ['PubMed', 'AAD', 'EU CosIng', 'Br. J. Dermatology', 'FDA']
 
-// Trust stats surfaced inside the hero glass panel.
-const HERO_STATS = [
-  { value: '30+', label: 'Actives explained' },
-  { value: '100%', label: 'Cited claims' },
-  { value: '0', label: 'Brand sponsors' },
-]
 
 export default function HomePage() {
   return (
@@ -127,29 +121,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Glass centerpiece — frosted panel with the brand aperture + trust stats */}
-            <div className="hidden lg:block animate-fade-in-up">
-              <div className="glass iris iris-on sheen relative overflow-hidden rounded-[1.75rem] p-8">
-                <div className="relative z-10">
-                  <HeroMark />
-                  <div className="mt-7 grid grid-cols-3 gap-3">
-                    {HERO_STATS.map((stat) => (
-                      <div
-                        key={stat.label}
-                        className="glass-quiet relative rounded-2xl px-3 py-4 text-center"
-                      >
-                        <div className="font-display text-2xl font-semibold text-accent">
-                          {stat.value}
-                        </div>
-                        <div className="mt-1 text-[0.7rem] leading-tight text-muted">
-                          {stat.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
