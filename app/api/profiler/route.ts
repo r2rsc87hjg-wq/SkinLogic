@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getProfilerLimiter, getIp } from '@/lib/rate-limit'
+import { getProfilerLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateProfilerInput } from '@/lib/validators'
 
 export const maxDuration = 60
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
   // 1. Rate limit check — before touching anything else
   const ip = getIp(request.headers)
   const limiter = getProfilerLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const resetDate = new Date(reset)

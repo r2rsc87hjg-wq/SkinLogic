@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic } from '@/lib/claude'
-import { getIp } from '@/lib/rate-limit'
+import { getIp , safeLimit } from '@/lib/rate-limit'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
@@ -42,7 +42,7 @@ function extractJson(text: string): unknown | null {
 export async function POST(request: NextRequest) {
   // Rate limit by IP — 5 scans per hour
   const ip = getIp(request.headers)
-  const { success } = await getScanLimiter().limit(ip)
+  const { success } = await safeLimit(getScanLimiter(), ip)
   if (!success) {
     return NextResponse.json({ error: 'rate_limited', message: 'Too many scans. Please wait an hour and try again.' }, { status: 429 })
   }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
-import { getTokenExchangeLimiter, getIp } from '@/lib/rate-limit'
+import { getTokenExchangeLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import {
   issueSubscriptionToken,
   TokenAlreadyIssuedError,
@@ -8,7 +8,7 @@ import {
 
 export async function GET(request: NextRequest) {
   const ip = getIp(request.headers)
-  const { success } = await getTokenExchangeLimiter().limit(ip)
+  const { success } = await safeLimit(getTokenExchangeLimiter(), ip)
   if (!success) {
     return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
   }

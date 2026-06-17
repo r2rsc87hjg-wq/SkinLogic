@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getNavigatorClinicsLimiter, getIp } from '@/lib/rate-limit'
+import { getNavigatorClinicsLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 
 const PLACES_KEY = process.env.GOOGLE_MAPS_API_KEY
 const SEARCH_RADIUS = 10000 // 10 km
@@ -7,7 +7,7 @@ const SEARCH_RADIUS = 10000 // 10 km
 export async function POST(request: NextRequest) {
   const ip = getIp(request.headers)
   const limiter = getNavigatorClinicsLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const minutesUntilReset = Math.ceil((new Date(reset).getTime() - Date.now()) / 60000)

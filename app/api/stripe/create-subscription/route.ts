@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
-import { getPaymentLimiter, getIp } from '@/lib/rate-limit'
+import { getPaymentLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   }
 
   const ip = getIp(request.headers)
-  const { success } = await getPaymentLimiter().limit(ip)
+  const { success } = await safeLimit(getPaymentLimiter(), ip)
   if (!success) {
     return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
   }

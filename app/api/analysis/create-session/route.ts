@@ -15,7 +15,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
-import { getTokenExchangeLimiter, getIp } from '@/lib/rate-limit'
+import { getTokenExchangeLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import {
   issueSessionToken,
   TokenAlreadyIssuedError,
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   // 0. Rate limit before touching Stripe — each call costs one retrieve.
   const ip = getIp(request.headers)
   const limiter = getTokenExchangeLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const minutesUntilReset = Math.ceil((reset - Date.now()) / 60000)

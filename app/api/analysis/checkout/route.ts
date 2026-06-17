@@ -5,14 +5,14 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
-import { getPaymentLimiter, getIp } from '@/lib/rate-limit'
+import { getPaymentLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { ANALYSIS_PRICE_CENTS, ANALYSIS_CURRENCY } from '@/lib/pricing'
 
 export async function POST(request: NextRequest) {
   // 1. Rate limit before doing anything else.
   const ip = getIp(request.headers)
   const limiter = getPaymentLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const minutesUntilReset = Math.ceil((reset - Date.now()) / 60000)

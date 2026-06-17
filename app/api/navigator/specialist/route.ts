@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getNavigatorSpecialistLimiter, getIp } from '@/lib/rate-limit'
+import { getNavigatorSpecialistLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateNavigatorTextInput } from '@/lib/validators'
 import { scrubPII } from '@/lib/pii-scrubber'
 
@@ -25,7 +25,7 @@ Rules you must follow without exception:
 export async function POST(request: NextRequest) {
   const ip = getIp(request.headers)
   const limiter = getNavigatorSpecialistLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const minutesUntilReset = Math.ceil((new Date(reset).getTime() - Date.now()) / 60000)

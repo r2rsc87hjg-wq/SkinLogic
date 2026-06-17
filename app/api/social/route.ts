@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type Anthropic from '@anthropic-ai/sdk'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getSocialLimiter, getIp } from '@/lib/rate-limit'
+import { getSocialLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateSocialInput } from '@/lib/validators'
 
 import type { SocialContentOutput } from '@/types/social'
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
   // 1. Rate limit
   const ip = getIp(request.headers)
   const limiter = getSocialLimiter()
-  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(limiter, ip)
 
   if (!success) {
     const minutesUntilReset = Math.ceil((reset - Date.now()) / 60000)

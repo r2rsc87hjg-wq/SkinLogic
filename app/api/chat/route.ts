@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getChatLimiter, getIp } from '@/lib/rate-limit'
+import { getChatLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateChatInput } from '@/lib/validators'
 
 export const maxDuration = 60
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   const ip = getIp(request.headers)
 
   // 1. Rate limit by IP.
-  const { success, limit, remaining, reset } = await getChatLimiter().limit(ip)
+  const { success, limit, remaining, reset } = await safeLimit(getChatLimiter(), ip)
 
   if (!success) {
     const minutes = Math.ceil((reset - Date.now()) / 60000)

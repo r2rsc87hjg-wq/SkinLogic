@@ -123,6 +123,33 @@ export function getNavigatorClinicsLimiter() {
   })
 }
 
+// Runs a limiter without ever throwing. If Redis is misconfigured or
+// unreachable (e.g. a bad UPSTASH token → WRONGPASS), we fail OPEN — allow the
+// request through rather than letting the throw crash the route with an empty
+// response body. A broken rate limiter should degrade protection, never take
+// down every AI endpoint at once.
+type LimitResult = {
+  success: boolean
+  limit: number
+  remaining: number
+  reset: number
+}
+
+export async function safeLimit(
+  limiter: Ratelimit,
+  ip: string
+): Promise<LimitResult> {
+  try {
+    return await limiter.limit(ip)
+  } catch (err) {
+    console.error(
+      '[rate-limit] limiter error — failing open:',
+      err instanceof Error ? err.message : String(err)
+    )
+    return { success: true, limit: 0, remaining: 0, reset: Date.now() }
+  }
+}
+
 // Helper: extract best available IP from Next.js request headers
 export function getIp(headers: Headers): string {
   return (

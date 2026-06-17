@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type Anthropic from '@anthropic-ai/sdk'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
 import { validateImageFile } from '@/lib/validators'
-import { getAnalysisLimiter, getIp } from '@/lib/rate-limit'
+import { getAnalysisLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 
 export const maxDuration = 60
 
@@ -52,7 +52,7 @@ const USER_INSTRUCTION =
 export async function POST(request: NextRequest) {
   // 1. Rate limit by IP.
   const ip = getIp(request.headers)
-  const { success, reset } = await getAnalysisLimiter().limit(ip)
+  const { success, reset } = await safeLimit(getAnalysisLimiter(), ip)
   if (!success) {
     const minutes = Math.ceil((reset - Date.now()) / 60000)
     return NextResponse.json(

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { anthropic, CLAUDE_DEFAULTS } from '@/lib/claude'
-import { getLearnGuideLimiter, getIp } from '@/lib/rate-limit'
+import { getLearnGuideLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateLearnGuideInput } from '@/lib/validators'
 import { ARTICLES } from '@/content/learn/articles'
 
@@ -54,7 +54,7 @@ function extractJson(text: string): unknown | null {
 export async function POST(request: NextRequest) {
   // 1. Rate limit by IP.
   const ip = getIp(request.headers)
-  const { success, reset } = await getLearnGuideLimiter().limit(ip)
+  const { success, reset } = await safeLimit(getLearnGuideLimiter(), ip)
   if (!success) {
     const minutes = Math.ceil((reset - Date.now()) / 60000)
     return NextResponse.json(
@@ -193,14 +193,14 @@ export async function POST(request: NextRequest) {
       internal,
     })
   } catch (err) {
-    const detail = err instanceof Error ? err.message : String(err)
-    console.error('[learn-guide] Claude API error:', detail)
-    // TEMP DIAGNOSTIC: surface the real error to the client so we can see what
-    // Vercel is hitting. Remove once the root cause is confirmed.
+    console.error(
+      '[learn-guide] Claude API error:',
+      err instanceof Error ? err.message : 'unknown'
+    )
     return NextResponse.json(
       {
         error: 'api_error',
-        message: `Pip could not answer just now. (debug: ${detail})`,
+        message: 'Pip could not answer just now. Please try again.',
       },
       { status: 500 }
     )
