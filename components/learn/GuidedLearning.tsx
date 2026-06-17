@@ -62,8 +62,19 @@ export function GuidedLearning() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: q, history }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.message ?? 'Something went wrong.')
+      // Read the body as text first so an empty body (e.g. a timed-out or
+      // crashed serverless function) doesn't blow up JSON.parse with a cryptic
+      // "Unexpected end of JSON input" — fall back to a friendly message.
+      const raw = await res.text()
+      let data: { message?: string; lesson?: string; followups?: string[]; articles?: WebArticle[]; internal?: InternalArticle[] } = {}
+      try {
+        data = raw ? JSON.parse(raw) : {}
+      } catch {
+        data = {}
+      }
+      if (!res.ok || typeof data.lesson !== 'string') {
+        throw new Error(data.message ?? 'Pip could not answer just now. Please try again.')
+      }
 
       setTurns((prev) => [
         ...prev,

@@ -90,7 +90,16 @@ export async function POST(request: NextRequest) {
   messages.push({ role: 'user', content: validation.question })
 
   // 4. Call Claude with a single web search allowed (keeps costs low).
-  const tools = [{ type: 'web_search_20260209', name: 'web_search', max_uses: 1 }]
+  // allowed_callers: ['direct'] is required so Haiku (which doesn't support
+  // programmatic tool calling) can invoke the server-side web_search tool.
+  const tools = [
+    {
+      type: 'web_search_20260209',
+      name: 'web_search',
+      max_uses: 1,
+      allowed_callers: ['direct'],
+    },
+  ]
 
   try {
     let response = await anthropic.messages.create({
