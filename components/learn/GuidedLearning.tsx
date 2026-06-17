@@ -76,16 +76,14 @@ export function GuidedLearning() {
         throw new Error(data.message ?? 'Pip could not answer just now. Please try again.')
       }
 
-      setTurns((prev) => [
-        ...prev,
-        {
-          role: 'pip',
-          lesson: data.lesson,
-          followups: data.followups ?? [],
-          articles: data.articles ?? [],
-          internal: data.internal ?? [],
-        },
-      ])
+      const answer: PipAnswer = {
+        role: 'pip',
+        lesson: data.lesson,
+        followups: data.followups ?? [],
+        articles: data.articles ?? [],
+        internal: data.internal ?? [],
+      }
+      setTurns((prev) => [...prev, answer])
       requestAnimationFrame(() =>
         endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       )
