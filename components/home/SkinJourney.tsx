@@ -433,17 +433,21 @@ const PRINCIPLES = [
 function AllTools() {
   return (
     <div className="relative">
-      {/* Gradient bridge from dark journey to light page */}
+      {/* Seamless fade from the dark journey into the page background.
+          Fades to transparent (not a solid colour) so the page's liquid
+          background shows through with no visible seam. */}
       <div
         aria-hidden
-        className="h-24 w-full"
+        className="w-full"
         style={{
-          background: 'linear-gradient(to bottom, #04100a 0%, #faf8f3 100%)',
+          height: '320px',
+          background:
+            'linear-gradient(to bottom, #04100a 0%, rgba(4,16,10,0.65) 38%, rgba(4,16,10,0.25) 68%, rgba(4,16,10,0) 100%)',
         }}
       />
 
       {/* Tools grid */}
-      <section className="mx-auto max-w-5xl px-4 pb-24">
+      <section className="mx-auto max-w-5xl px-4 pb-24 -mt-16">
         <div className="mb-12 text-center">
           <p className="eyebrow text-accent mb-3">Everything in one place</p>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink">
