@@ -3,7 +3,6 @@ import { Newsreader, Public_Sans } from 'next/font/google'
 import './globals.css'
 import { SiteHeader } from '@/components/site/Header'
 import { SiteFooter } from '@/components/site/Footer'
-import { ChatWidget } from '@/components/chat/ChatWidget'
 import { LiquidBackground } from '@/components/ui/LiquidBackground'
 
 // Self-hosted by next/font at build time → fast, and no external requests,
@@ -46,7 +45,6 @@ export default function RootLayout({
         <SiteHeader />
         <div className="flex-1">{children}</div>
         <SiteFooter />
-        <ChatWidget />
       </body>
     </html>
   )

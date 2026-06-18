@@ -47,42 +47,16 @@ const STOPS = [
     sources: false,
   },
   {
-    id: 'coach',
-    step: '03',
-    label: 'Skin Health Coach',
-    title: 'Ask anything,\nget science back.',
-    desc: 'A warm, judgment-free AI guide for every skin question — routines, conditions, ingredients, athlete skincare, and more. Always free.',
-    href: null,
-    cta: 'Chat opens in the corner ↘',
-    accent: '#3a8a75',
-    glow: 'rgba(58,138,117,0.22)',
-    icon: <ChatIcon />,
-    sources: false,
-  },
-  {
     id: 'analysis',
-    step: '04',
+    step: '03',
     label: 'AI Skin Analysis',
-    title: 'Upload a photo.\nGet educated.',
-    desc: "Free AI-powered reading of what's visible in your photo and what the research says about it. Your image is never stored.",
+    title: 'Your profile.\nYour photo.\nYour science.',
+    desc: 'Answer a few questions about your skin, then optionally add a photo. The AI combines what it sees with what the research says about your specific profile.',
     href: '/analysis',
     cta: 'Try the analysis',
     accent: '#2d6b8a',
     glow: 'rgba(45,107,138,0.22)',
     icon: <CameraIcon />,
-    sources: false,
-  },
-  {
-    id: 'profiler',
-    step: '05',
-    label: 'Skin Profiler',
-    title: 'Research relevant\nto your skin.',
-    desc: 'Tell the profiler your characteristics and concerns — it translates the peer-reviewed evidence into what matters for you specifically.',
-    href: '/profiler',
-    cta: 'Build your profile',
-    accent: '#7a5b8a',
-    glow: 'rgba(122,91,138,0.20)',
-    icon: <ProfileIcon />,
     sources: false,
   },
   {
@@ -445,8 +419,7 @@ const TOOLS = [
   { href: '/ingredients', title: 'Ingredient Explainer', desc: 'Actives decoded: research vs marketing, honest bottom lines.', tag: 'Free' },
   { href: '/sunscreen', title: 'Sunscreen Guide', desc: 'How sunscreen works, the US vs EU gap, and how to get real protection.', tag: 'Free' },
   { href: '/app-scanner-comparison', title: 'App & Scanner Audit', desc: 'What skincare apps really do vs what they claim.', tag: 'Free' },
-  { href: '/profiler', title: 'Skin Profile Educator', desc: 'Research translated to what matters for your specific skin profile.', tag: 'AI' },
-  { href: '/analysis', title: 'AI Skin Analysis', desc: 'Free AI reading of one photo. Explains what it sees. Never stored.', tag: 'Free' },
+  { href: '/analysis', title: 'AI Skin Analysis', desc: 'Your profile + optional photo → personalised research from the AI. Nothing stored.', tag: 'Free' },
   { href: '/tracker', title: 'Skin Tracker', desc: 'Upload a photo, get a plain-English analysis, track changes over time.', tag: 'Free' },
 ]
 
@@ -548,26 +521,11 @@ function FlaskIcon() {
     </svg>
   )
 }
-function ChatIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-    </svg>
-  )
-}
 function CameraIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
       <circle cx="12" cy="13" r="4" />
-    </svg>
-  )
-}
-function ProfileIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
     </svg>
   )
 }

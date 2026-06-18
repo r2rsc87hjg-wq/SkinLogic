@@ -12,15 +12,6 @@ function getRedis() {
   })
 }
 
-// Tool 4: Free AI profiler — 3 requests per IP per hour
-export function getProfilerLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(3, '1 h'),
-    prefix: 'rl:profiler',
-  })
-}
-
 // Tool 6: Payment initiation — 10 attempts per IP per hour (per spec)
 export function getPaymentLimiter() {
   return new Ratelimit({
@@ -111,15 +102,6 @@ export function getAnalysisLimiter() {
     redis: getRedis(),
     limiter: Ratelimit.slidingWindow(3, '1 h'),
     prefix: 'rl:analysis',
-  })
-}
-
-// Clinics lookup — 20 per hour (no AI cost, but does hit Places API)
-export function getNavigatorClinicsLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(20, '1 h'),
-    prefix: 'rl:navigator:clinics',
   })
 }
 

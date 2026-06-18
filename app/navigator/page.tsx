@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { PrivacyBanner } from './components/PrivacyBanner'
 import { MedicalDisclaimer } from './components/MedicalDisclaimer'
-import { SpecialistFinder } from './components/SpecialistFinder'
 import { ReferralExplainer } from './components/ReferralExplainer'
 
 export const metadata: Metadata = {
@@ -37,11 +36,7 @@ export default function NavigatorPage() {
 
         <PrivacyBanner />
 
-        {/* AI modules */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SpecialistFinder />
-          <ReferralExplainer />
-        </div>
+        <ReferralExplainer />
 
         <MedicalDisclaimer />
       </main>
