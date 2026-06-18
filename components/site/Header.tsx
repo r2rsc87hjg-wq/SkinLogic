@@ -36,7 +36,9 @@ export function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           <Mark />
-          <span className="font-display text-xl font-semibold tracking-tight text-ink">
+          <span className={`font-display text-xl font-semibold tracking-tight ${
+            isHome ? 'text-white' : 'text-ink'
+          }`}>
             SkinLogic
           </span>
         </Link>
@@ -52,7 +54,7 @@ export function SiteHeader() {
                 aria-current={active ? 'page' : undefined}
                 className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${
                   isHome
-                    ? active ? 'text-white' : 'text-white/60 hover:text-white'
+                    ? active ? 'text-white' : 'text-white/80 hover:text-white'
                     : active ? 'text-ink' : 'text-muted hover:text-ink'
                 }`}
               >
@@ -80,7 +82,9 @@ export function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
-            className="md:hidden grid place-items-center h-10 w-10 -mr-2 rounded-full text-ink hover:bg-sand transition-colors"
+            className={`md:hidden grid place-items-center h-10 w-10 -mr-2 rounded-full transition-colors ${
+              isHome ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-sand'
+            }`}
           >
             {open ? <IconClose /> : <IconMenu />}
           </button>
