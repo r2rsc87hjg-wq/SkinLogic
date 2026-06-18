@@ -20,9 +20,15 @@ export function SiteHeader() {
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/')
 
+  const isHome = pathname === '/'
+
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4">
-      <div className="glass iris iris-on relative mx-auto flex max-w-5xl items-center gap-6 rounded-full px-4 sm:px-5 h-16">
+      <div className={`relative mx-auto flex max-w-5xl items-center gap-6 rounded-full px-4 sm:px-5 h-16 ${
+        isHome
+          ? 'border border-white/10 bg-transparent'
+          : 'glass iris iris-on'
+      }`}>
         {/* Wordmark */}
         <Link
           href="/"
@@ -45,7 +51,9 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${
-                  active ? 'text-ink' : 'text-muted hover:text-ink'
+                  isHome
+                    ? active ? 'text-white' : 'text-white/60 hover:text-white'
+                    : active ? 'text-ink' : 'text-muted hover:text-ink'
                 }`}
               >
                 {item.label}
