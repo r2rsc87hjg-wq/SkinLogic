@@ -10,6 +10,7 @@ import { PortableText } from '@/components/portable-text'
 import { CitationList } from '@/components/citation'
 import { VerdictBadge } from '@/components/scanner/VerdictBadge'
 import type { VerdictRating } from '@/components/scanner/VerdictBadge'
+import { SEED_SCANNERS } from '@/content/seed/scanners'
 
 export const revalidate = 3600
 
@@ -36,16 +37,32 @@ interface Props {
 
 export async function generateStaticParams() {
   const slugs = await sanityFetch<{ slug: string }[]>(SCANNER_SLUGS_QUERY)
-  return (slugs ?? []).map(({ slug }) => ({ slug }))
+  const cmsSlugs = (slugs ?? []).map(({ slug }) => ({ slug }))
+  const seen = new Set(cmsSlugs.map((s) => s.slug))
+  const seedSlugs = SEED_SCANNERS.filter((s) => !seen.has(s.slug)).map((s) => ({ slug: s.slug }))
+  return [...cmsSlugs, ...seedSlugs]
+}
+
+async function getScanner(slug: string): Promise<AppScanner | null> {
+  const cms = await sanityFetch<AppScanner>(SCANNER_BY_SLUG_QUERY, { slug }, ['appScanner'])
+  if (cms) return cms
+  const seed = SEED_SCANNERS.find((s) => s.slug === slug)
+  if (!seed) return null
+  return {
+    _id: seed._id,
+    name: seed.name,
+    slug: seed.slug,
+    technology: seed.technology,
+    verdictRating: seed.verdictRating,
+    verdict: seed.verdict,
+    worthItFor: seed.worthItFor,
+    notForYouIf: seed.notForYouIf,
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const scanner = await sanityFetch<AppScanner>(
-    SCANNER_BY_SLUG_QUERY,
-    { slug },
-    ['appScanner']
-  )
+  const scanner = await getScanner(slug)
   if (!scanner) return { title: 'App Not Found' }
   return {
     title: `${scanner.name} — Honest Review`,
@@ -55,11 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ScannerPage({ params }: Props) {
   const { slug } = await params
-  const scanner = await sanityFetch<AppScanner>(
-    SCANNER_BY_SLUG_QUERY,
-    { slug },
-    ['appScanner']
-  )
+  const scanner = await getScanner(slug)
 
   if (!scanner) notFound()
 

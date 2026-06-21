@@ -420,6 +420,7 @@ const TOOLS = [
   { href: '/sunscreen', title: 'Sunscreen Guide', desc: 'How sunscreen works, the US vs EU gap, and how to get real protection.', tag: 'Free' },
   { href: '/app-scanner-comparison', title: 'App & Scanner Audit', desc: 'What skincare apps really do vs what they claim.', tag: 'Free' },
   { href: '/analysis', title: 'AI Skin Analysis', desc: 'Your profile + optional photo → personalised research from the AI. Nothing stored.', tag: 'Free' },
+  { href: '/industry', title: 'How the Industry Works', desc: 'What "clinically proven" really means, the EU/US gap, influencer economics, and why price ≠ quality.', tag: 'Free' },
 ]
 
 const PRINCIPLES = [
