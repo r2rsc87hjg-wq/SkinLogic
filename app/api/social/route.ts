@@ -8,8 +8,8 @@ import type { SocialContentOutput } from '@/types/social'
 
 export const maxDuration = 60
 
-// Higher ceiling than the profiler — three complete creative formats in one call.
-const SOCIAL_MAX_TOKENS = 4000
+// Three creative formats in one call — 1500 tokens is ample for the structured output.
+const SOCIAL_MAX_TOKENS = 1500
 
 const SYSTEM_PROMPT = `You are a social media content writer for a skincare science education platform. Your job is to translate evidence-based skincare content into social formats that preserve scientific accuracy, cite sources visibly, and challenge marketing myths — without becoming marketing material yourself.
 
@@ -198,7 +198,7 @@ export async function POST(request: NextRequest) {
     const response = await anthropic.messages.create({
       model: CLAUDE_DEFAULTS.model,
       max_tokens: SOCIAL_MAX_TOKENS,
-      system: SYSTEM_PROMPT,
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
       tools: [SOCIAL_CONTENT_TOOL],
       tool_choice: { type: 'tool', name: 'generate_social_content' },
       messages: [{ role: 'user', content: userMessage }],

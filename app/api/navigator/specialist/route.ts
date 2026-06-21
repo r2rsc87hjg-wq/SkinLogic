@@ -67,9 +67,9 @@ export async function POST(request: NextRequest) {
 
   try {
     const stream = anthropic.messages.stream({
-      model: CLAUDE_DEFAULTS.model,
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: MAX_TOKENS,
-      system: SYSTEM_PROMPT,
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
       messages: [
         {
           role: 'user',

@@ -105,18 +105,21 @@ export async function POST(request: NextRequest) {
     let response = await anthropic.messages.create({
       model: PIP_MODEL,
       max_tokens: LEARN_MAX_TOKENS,
-      system: SYSTEM_PROMPT,
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
       tools: tools as never,
       messages: messages as never,
     })
 
+    // Allow up to 3 calls total — web search with history sometimes needs two
+    // pause_turn continuations before producing final JSON. System prompt is
+    // cached so calls 2 and 3 only pay for incremental context tokens.
     let guard = 0
     while ((response.stop_reason as string) === 'pause_turn' && guard < 2) {
       messages.push({ role: 'assistant', content: response.content })
       response = await anthropic.messages.create({
         model: PIP_MODEL,
         max_tokens: LEARN_MAX_TOKENS,
-        system: SYSTEM_PROMPT,
+        system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
         tools: tools as never,
         messages: messages as never,
       })

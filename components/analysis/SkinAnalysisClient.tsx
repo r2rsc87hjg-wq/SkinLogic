@@ -1,8 +1,34 @@
 'use client'
 
 import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { Disclaimer } from '@/components/disclaimer'
+
+// ── Types ──────────────────────────────────────────────────────────────────
+
+interface RoutineStep {
+  step: number
+  category: string
+  what_to_look_for: string
+  why: string
+  tip: string
+  knowledge_note?: string
+}
+
+interface Ingredient {
+  name: string
+  why: string
+}
+
+interface AnalysisResult {
+  skin_summary: string
+  morning_routine: RoutineStep[]
+  evening_routine: RoutineStep[]
+  ingredients_to_seek: Ingredient[]
+  ingredients_to_avoid: Ingredient[]
+  spf_flag: boolean
+  learn_more_topics: string[]
+}
+
+// ── Constants ──────────────────────────────────────────────────────────────
 
 const SKIN_TYPES = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal'] as const
 const CONCERNS = ['Acne', 'Aging', 'Hyperpigmentation', 'Redness', 'Texture', 'Dehydration'] as const
@@ -34,13 +60,15 @@ const EMPTY_PROFILE: ProfileState = {
 
 type Phase = 'form' | 'analyzing' | 'done'
 
+// ── Main component ──────────────────────────────────────────────────────────
+
 export function SkinAnalysisClient() {
   const [profile, setProfile] = useState<ProfileState>(EMPTY_PROFILE)
   const [file, setFile] = useState<File | null>(null)
   const [note, setNote] = useState('')
   const [phase, setPhase] = useState<Phase>('form')
   const [error, setError] = useState('')
-  const [result, setResult] = useState('')
+  const [result, setResult] = useState<AnalysisResult | null>(null)
 
   function setField(field: keyof ProfileState, value: string) {
     setProfile((prev) => ({ ...prev, [field]: value }))
@@ -91,8 +119,8 @@ export function SkinAnalysisClient() {
       const res = await fetch('/api/analysis/submit', { method: 'POST', body })
       const data = await res.json()
 
-      if (res.ok) {
-        setResult(data.analysis)
+      if (res.ok && data.result) {
+        setResult(data.result)
         setPhase('done')
         return
       }
@@ -111,55 +139,11 @@ export function SkinAnalysisClient() {
     setNote('')
     setPhase('form')
     setError('')
-    setResult('')
+    setResult(null)
   }
 
-  if (phase === 'done') {
-    return (
-      <div className="space-y-8">
-        <Disclaimer variant="paid-analysis" />
-        <div className="prose prose-gray prose-sm max-w-none">
-          <ReactMarkdown
-            components={{
-              h2: ({ children }) => (
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mt-8 mb-3 first:mt-0">
-                  {children}
-                </h2>
-              ),
-              p: ({ children }) => (
-                <p className="text-gray-700 leading-relaxed mb-4">{children}</p>
-              ),
-              ul: ({ children }) => <ul className="space-y-2 my-3">{children}</ul>,
-              li: ({ children }) => (
-                <li className="flex gap-2 text-gray-700 text-sm leading-relaxed">
-                  <span className="text-gray-300 shrink-0 mt-0.5">—</span>
-                  <span>{children}</span>
-                </li>
-              ),
-              strong: ({ children }) => (
-                <strong className="font-semibold text-gray-900">{children}</strong>
-              ),
-            }}
-          >
-            {result}
-          </ReactMarkdown>
-        </div>
-        <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
-          <button
-            onClick={reset}
-            className="text-sm font-medium text-gray-900 underline underline-offset-2 hover:text-gray-600"
-          >
-            ← Start over with a different profile
-          </button>
-          <a
-            href="/ingredients"
-            className="text-sm font-medium text-gray-900 underline underline-offset-2 hover:text-gray-600 sm:ml-auto"
-          >
-            Explore the ingredient library →
-          </a>
-        </div>
-      </div>
-    )
+  if (phase === 'done' && result) {
+    return <ResultsView result={result} profile={profile} onReset={reset} />
   }
 
   const busy = phase === 'analyzing'
@@ -317,6 +301,323 @@ export function SkinAnalysisClient() {
     </form>
   )
 }
+
+// ── Results view ────────────────────────────────────────────────────────────
+
+interface ResultsViewProps {
+  result: AnalysisResult
+  profile: ProfileState
+  onReset: () => void
+}
+
+function buildRoutineText(result: AnalysisResult, profile: ProfileState): string {
+  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const tags = [profile.skinType, profile.primaryConcern, profile.ageRange, profile.climate]
+    .filter(Boolean).join(' · ')
+  const formatStep = (s: RoutineStep) =>
+    `${s.step}. ${s.category}\n   Look for: ${s.what_to_look_for}\n   ${s.why}\n   Tip: ${s.tip}`
+
+  return [
+    `SKINLOGIC ROUTINE · ${date}`,
+    `Profile: ${tags}`,
+    '',
+    result.skin_summary,
+    '',
+    '─── MORNING ROUTINE ───',
+    ...result.morning_routine.map(formatStep),
+    '',
+    '─── EVENING ROUTINE ───',
+    ...result.evening_routine.map(formatStep),
+    '',
+    `Seek: ${result.ingredients_to_seek.map((i) => i.name).join(', ')}`,
+    `Avoid: ${result.ingredients_to_avoid.map((i) => i.name).join(', ')}`,
+    '',
+    'This routine is educational guidance based on published research, not medical advice.',
+    'For persistent concerns, see a board-certified dermatologist.',
+  ].join('\n')
+}
+
+function slugToTitle(slug: string): string {
+  const overrides: Record<string, string> = {
+    'aha-bha-deep-dive': 'AHA & BHA Deep Dive',
+    'spf-the-one-non-negotiable': 'SPF: The One Non-Negotiable',
+    'chemical-vs-mineral-sunscreen': 'Chemical vs. Mineral Sunscreen',
+    'uv-index-explained': 'UV Index Explained',
+  }
+  return overrides[slug] ?? slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+}
+
+function ResultsView({ result, profile, onReset }: ResultsViewProps) {
+  const isAdvanced = profile.knowledgeLevel === 'Advanced'
+  const [copied, setCopied] = useState(false)
+
+  const profileTags = [
+    profile.skinType,
+    profile.primaryConcern,
+    profile.ageRange,
+    profile.climate,
+    profile.gender || null,
+  ].filter(Boolean) as string[]
+
+  async function copyRoutine() {
+    try {
+      await navigator.clipboard.writeText(buildRoutineText(result, profile))
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // clipboard access denied — silently fail
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Privacy note */}
+      <p className="text-xs text-center text-muted">
+        Nothing is stored — your analysis exists only in this browser session.
+      </p>
+
+      {/* 1. Skin summary */}
+      <div className="rounded-2xl border border-line bg-sand/40 p-6 space-y-4">
+        <p className="eyebrow text-accent">Here&apos;s what&apos;s going on with your skin</p>
+        <p className="text-ink leading-relaxed">{result.skin_summary}</p>
+        <div className="flex flex-wrap gap-2">
+          {profileTags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs bg-white border border-line rounded-full px-3 py-1 text-muted"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. SPF warning */}
+      {result.spf_flag && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+          <p className="text-sm font-semibold text-amber-900 mb-1">
+            SPF is non-negotiable for your concern.
+          </p>
+          <p className="text-sm text-amber-800">
+            Skipping it will work against everything else in this routine.
+          </p>
+        </div>
+      )}
+
+      {/* 3. Morning routine */}
+      <RoutineCard label="Morning" steps={result.morning_routine} isAdvanced={isAdvanced} />
+
+      {/* 4. Evening routine */}
+      <RoutineCard label="Evening" steps={result.evening_routine} isAdvanced={isAdvanced} />
+
+      {/* 5. Ingredients */}
+      <div className="grid sm:grid-cols-2 gap-4">
+        <IngredientList
+          title="Ingredients to seek"
+          items={result.ingredients_to_seek}
+          variant="seek"
+        />
+        <IngredientList
+          title="Ingredients to avoid"
+          items={result.ingredients_to_avoid}
+          variant="avoid"
+        />
+      </div>
+
+      {/* 6. Learn more */}
+      {result.learn_more_topics.length > 0 && (
+        <LearnMoreSection topics={result.learn_more_topics} />
+      )}
+
+      {/* 7. Actions */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-line">
+        <button
+          onClick={copyRoutine}
+          className="flex-1 text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-ink transition-colors"
+        >
+          {copied ? 'Copied to clipboard' : 'Copy my routine'}
+        </button>
+        <button
+          onClick={onReset}
+          className="flex-1 text-sm font-medium py-2.5 px-4 rounded-full border border-line text-muted hover:text-ink hover:border-ink transition-colors"
+        >
+          Start over
+        </button>
+      </div>
+
+      {/* Disclaimer */}
+      <p className="text-xs text-muted leading-relaxed text-center pb-2">
+        This routine is educational guidance based on published research, not medical advice.
+        For persistent concerns, see a board-certified dermatologist.
+      </p>
+    </div>
+  )
+}
+
+// ── Routine card ────────────────────────────────────────────────────────────
+
+function SunIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="12" r="5" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  )
+}
+
+interface RoutineCardProps {
+  label: 'Morning' | 'Evening'
+  steps: RoutineStep[]
+  isAdvanced: boolean
+}
+
+function RoutineCard({ label, steps, isAdvanced }: RoutineCardProps) {
+  const isMorning = label === 'Morning'
+
+  return (
+    <div className="rounded-2xl border border-line overflow-hidden">
+      <div
+        className={`px-6 py-4 flex items-center gap-2.5 ${
+          isMorning ? 'bg-amber-50/70 text-amber-900' : 'bg-slate-50/80 text-slate-700'
+        }`}
+      >
+        {isMorning ? <SunIcon /> : <MoonIcon />}
+        <p className="font-medium text-sm">{label} Routine</p>
+        <span className="ml-auto text-xs opacity-60">{steps.length} steps</span>
+      </div>
+
+      <div className="divide-y divide-line">
+        {steps.map((step) => {
+          const isRetinoid = /retinol|retinoid/i.test(`${step.category} ${step.what_to_look_for}`)
+          return (
+            <div key={step.step} className="px-6 py-5">
+              <div className="flex gap-4">
+                <span className="text-xs font-semibold text-muted tabular-nums shrink-0 pt-0.5 w-5">
+                  {String(step.step).padStart(2, '0')}
+                </span>
+                <div className="space-y-1.5 min-w-0 flex-1">
+                  <p className="font-medium text-ink">{step.category}</p>
+                  <p className="text-sm text-gray-600">
+                    <span className="text-muted">Look for: </span>
+                    {step.what_to_look_for}
+                  </p>
+                  <p className="text-sm text-gray-700 leading-relaxed">{step.why}</p>
+                  <p className="text-xs text-muted leading-relaxed">{step.tip}</p>
+
+                  {isRetinoid && (
+                    <p className="text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mt-2 leading-relaxed">
+                      Start 2–3 nights per week and build up. This is where most people go wrong.
+                    </p>
+                  )}
+
+                  {isAdvanced && step.knowledge_note && (
+                    <details className="mt-2">
+                      <summary className="text-xs font-medium text-accent cursor-pointer select-none">
+                        Technical detail
+                      </summary>
+                      <p className="text-xs text-gray-600 mt-1.5 pl-3 border-l-2 border-accent/30 leading-relaxed">
+                        {step.knowledge_note}
+                      </p>
+                    </details>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ── Ingredient pills ────────────────────────────────────────────────────────
+
+interface IngredientListProps {
+  title: string
+  items: Ingredient[]
+  variant: 'seek' | 'avoid'
+}
+
+function IngredientList({ title, items, variant }: IngredientListProps) {
+  const [activeItem, setActiveItem] = useState<Ingredient | null>(null)
+  const isSeek = variant === 'seek'
+
+  return (
+    <div className="rounded-2xl border border-line p-5 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-widest text-muted">{title}</p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item) => {
+          const isActive = activeItem?.name === item.name
+          return (
+            <button
+              key={item.name}
+              onClick={() => setActiveItem(isActive ? null : item)}
+              className={`text-sm px-3 py-1 rounded-full border transition-colors ${
+                isSeek
+                  ? isActive
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'border-emerald-300 text-emerald-800 hover:border-emerald-500'
+                  : isActive
+                    ? 'bg-red-600 text-white border-red-600'
+                    : 'border-red-200 text-red-800 hover:border-red-400'
+              }`}
+            >
+              {item.name}
+            </button>
+          )
+        })}
+      </div>
+      {activeItem && (
+        <p className="text-xs text-muted leading-relaxed border-t border-line pt-3">
+          {activeItem.why}
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ── Learn more ──────────────────────────────────────────────────────────────
+
+function LearnMoreSection({ topics }: { topics: string[] }) {
+  return (
+    <div className="space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-widest text-muted">
+        Want to understand the science behind your routine?
+      </p>
+      <div className="grid gap-3">
+        {topics.map((slug) => (
+          <a
+            key={slug}
+            href={`/learn/${slug}`}
+            className="group rounded-xl border border-line p-4 flex items-center justify-between hover:border-accent/50 transition-colors"
+          >
+            <span className="text-sm font-medium text-ink group-hover:text-accent transition-colors">
+              {slugToTitle(slug)}
+            </span>
+            <span className="text-muted text-sm">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Radio group ─────────────────────────────────────────────────────────────
 
 interface RadioGroupProps {
   label: string

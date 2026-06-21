@@ -60,6 +60,14 @@ export function getNavigatorReferralLimiter() {
   })
 }
 
+export function getNavigatorClinicsLimiter() {
+  return new Ratelimit({
+    redis: getRedis(),
+    limiter: Ratelimit.slidingWindow(10, '1 h'),
+    prefix: 'rl:navigator:clinics',
+  })
+}
+
 // Skin Health Coach chatbot — 15 messages per IP per hour (free tier).
 export function getChatLimiter() {
   return new Ratelimit({
