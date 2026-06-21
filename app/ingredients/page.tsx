@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { sanityFetch } from '@/lib/sanity'
 import { INGREDIENTS_LIST_QUERY } from '@/lib/queries'
 import { IngredientSearch } from '@/components/search/IngredientSearch'
@@ -68,6 +69,15 @@ export default async function IngredientsPage() {
               cannot confirm it works the same way in living human skin. We
               always tell you which type of evidence a claim rests on.
             </p>
+          </div>
+
+          <div className="mt-4 max-w-2xl">
+            <Link
+              href="/ingredients/compare"
+              className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline underline-offset-2"
+            >
+              Compare two ingredients side-by-side →
+            </Link>
           </div>
         </header>
 

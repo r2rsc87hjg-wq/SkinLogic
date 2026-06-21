@@ -6,8 +6,10 @@ const COLUMNS = [
     links: [
       { href: '/learn', label: 'Learning Hub' },
       { href: '/ingredients', label: 'Ingredient Explainer' },
+      { href: '/ingredients/compare', label: 'Compare Ingredients' },
       { href: '/sunscreen', label: 'Sunscreen Guide' },
       { href: '/app-scanner-comparison', label: 'Apps & Scanners' },
+      { href: '/industry', label: 'How the Industry Works' },
     ],
   },
   {

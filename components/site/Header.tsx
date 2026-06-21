@@ -9,6 +9,7 @@ const NAV = [
   { href: '/ingredients', label: 'Ingredients' },
   { href: '/sunscreen', label: 'Sunscreen' },
   { href: '/app-scanner-comparison', label: 'Apps & Scanners' },
+  { href: '/industry', label: 'Industry' },
   { href: '/profiler', label: 'Skin Profiler' },
 ]
 

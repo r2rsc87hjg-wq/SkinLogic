@@ -104,6 +104,15 @@ export function getSubscriberLearnGuideLimiter() {
   })
 }
 
+// Ingredient comparison — 10 requests per IP per hour
+export function getComparisonLimiter() {
+  return new Ratelimit({
+    redis: getRedis(),
+    limiter: Ratelimit.slidingWindow(10, '1 h'),
+    prefix: 'rl:comparison',
+  })
+}
+
 // Free AI skin analysis — 3 requests per IP per hour (Sonnet vision, so keep low)
 export function getAnalysisLimiter() {
   return new Ratelimit({
