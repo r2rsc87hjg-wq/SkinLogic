@@ -17,6 +17,7 @@ export type Topic =
   | 'Mental health'
   | 'Lifestyle'
   | 'Athlete skincare'
+  | 'Nutrition'
 
 // Richer block types for interactive lessons
 export type Block =

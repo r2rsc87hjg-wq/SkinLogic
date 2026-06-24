@@ -36,7 +36,7 @@ function shortSummary(text: string): string {
 }
 
 export function IngredientCard({ name, slug, summary, studyTypes, category }: IngredientCardProps) {
-  const cat = (category && CATEGORY_CONFIG[category]) ?? DEFAULT_CATEGORY
+  const cat = (category ? CATEGORY_CONFIG[category] : undefined) ?? DEFAULT_CATEGORY
   const ev = getEvidence(studyTypes)
 
   return (
