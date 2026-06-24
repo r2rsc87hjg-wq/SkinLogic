@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { UVFilterTable } from '@/components/sunscreen/UVFilterTable'
 import { RatingSystemTable } from '@/components/sunscreen/RatingSystemTable'
 import { FormulaTypeTable } from '@/components/sunscreen/FormulaTypeTable'
-import { CollapsibleSection } from '@/components/sunscreen/CollapsibleSection'
+import { CollapsibleSection } from '@/components/ui/CollapsibleSection'
 
 export const metadata: Metadata = {
   title: 'Sunscreen Guide',

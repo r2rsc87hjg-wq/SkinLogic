@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { VerdictBadge } from './VerdictBadge'
 import type { VerdictRating } from './VerdictBadge'
+import { AppLogoImg } from './AppLogoImg'
 
 interface ScannerCardProps {
   name: string
@@ -15,47 +16,6 @@ interface ScannerCardProps {
   verdict?: string
   worthItFor?: string[]
   notForYouIf?: string[]
-}
-
-type LogoStage = 'clearbit' | 'favicon' | 'failed'
-
-function AppLogo({ name, domain }: { name: string; domain?: string }) {
-  const [stage, setStage] = useState<LogoStage>('clearbit')
-  const letter = name.charAt(0).toUpperCase()
-
-  if (domain && stage !== 'failed') {
-    const src =
-      stage === 'clearbit'
-        ? `https://logo.clearbit.com/${domain}`
-        : `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
-
-    return (
-      <div
-        className="flex-shrink-0 h-10 w-10 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-sm"
-        aria-hidden
-      >
-        <img
-          src={src}
-          alt=""
-          width={32}
-          height={32}
-          className="object-contain"
-          onError={() => setStage(stage === 'clearbit' ? 'favicon' : 'failed')}
-        />
-      </div>
-    )
-  }
-
-  return (
-    <div
-      className="flex-shrink-0 h-10 w-10 rounded-xl glass-quiet flex items-center justify-center"
-      aria-hidden
-    >
-      <span className="font-display text-base font-semibold text-ink/60">
-        {letter}
-      </span>
-    </div>
-  )
 }
 
 export function ScannerCard({
@@ -84,7 +44,9 @@ export function ScannerCard({
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <AppLogo name={name} domain={domain} />
+            <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-white/60 flex items-center justify-center overflow-hidden shadow-sm" aria-hidden>
+              <AppLogoImg domain={domain} name={name} size={32} />
+            </div>
             <div className="min-w-0">
               <h2 className="font-semibold text-ink text-base leading-tight">{name}</h2>
               {technology && (

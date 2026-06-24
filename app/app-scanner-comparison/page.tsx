@@ -7,7 +7,7 @@ import { AppLogoImg } from '@/components/scanner/AppLogoImg'
 import type { VerdictRating } from '@/components/scanner/VerdictBadge'
 import { VerdictBadge } from '@/components/scanner/VerdictBadge'
 import { SEED_SCANNERS } from '@/content/seed/scanners'
-import { CollapsibleAtAGlance } from '@/components/scanner/CollapsibleAtAGlance'
+import { CollapsibleSection } from '@/components/ui/CollapsibleSection'
 
 export const metadata: Metadata = {
   title: 'Skincare App & Scanner Comparison',
@@ -113,9 +113,9 @@ export default async function AppScannerComparisonPage() {
         {scanners.length ? (
           <>
             <CategoryContrast />
-            <CollapsibleAtAGlance>
+            <CollapsibleSection id="at-a-glance" label="At a glance" defaultOpen={false}>
               <ComparisonTable scanners={scanners} />
-            </CollapsibleAtAGlance>
+            </CollapsibleSection>
             <div className="space-y-12">
               {groups.map(({ rating, items }) => (
                 <section key={rating}>
@@ -285,13 +285,7 @@ function ComparisonTable({ scanners }: { scanners: ScannerListItem[] }) {
                       href={`/app-scanner-comparison/${s.slug}`}
                       className="font-medium text-ink underline-offset-2 hover:text-accent hover:underline inline-flex items-center gap-2"
                     >
-                      {s.domain ? (
-                        <AppLogoImg domain={s.domain} size={20} />
-                      ) : (
-                        <span className="inline-flex h-5 w-5 rounded items-center justify-center bg-sand border border-line/60 text-[0.6rem] font-bold text-ink/50 shrink-0">
-                          {s.name.charAt(0).toUpperCase()}
-                        </span>
-                      )}
+                      <AppLogoImg domain={s.domain} name={s.name} size={20} />
                       {s.name}
                     </Link>
                   </td>
