@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { CollapsibleSection } from '@/components/sunscreen/CollapsibleSection'
 
 export const metadata: Metadata = {
   title: 'How the Industry Works',
@@ -26,378 +27,268 @@ export default function IndustryPage() {
         <div className="absolute top-[60rem] right-[8%] h-[22rem] w-[22rem] rounded-full bg-[#7ee1c8]/12 blur-[120px]" />
       </div>
 
-      <article className="max-w-3xl mx-auto px-4 py-14">
+      <div className="max-w-5xl mx-auto px-4 py-14">
         {/* Header */}
-        <header className="mb-12">
-          <p className="eyebrow text-accent mb-3">Transparency</p>
-          <h1 className="font-display text-4xl md:text-5xl font-medium text-ink mb-5 leading-tight">
+        <header className="mb-10 max-w-3xl">
+          <p className="eyebrow text-accent mb-2">Transparency</p>
+          <h1 className="font-display text-4xl md:text-5xl font-medium text-ink mb-4 leading-tight">
             How the Industry Works
           </h1>
-          <p className="text-lg text-muted leading-relaxed max-w-2xl">
+          <p className="text-muted leading-relaxed text-lg">
             The research behind skincare is one thing. The industry that sells it
-            is another. This page explains the systems, claims, and incentives
-            that shape what gets marketed to you — so you can evaluate them
-            independently.
+            is another — the systems, claims, and incentives decoded.
           </p>
-          <div className="mt-6 glass rounded-2xl px-5 py-4 text-sm text-ink/80 leading-relaxed">
-            <strong className="text-ink">A note on tone:</strong> This is not
-            an attack on the skincare industry. Many brands do excellent science.
-            The goal here is to explain how the machinery works so that marketing
-            language stops doing the work that evidence should be doing.
-          </div>
         </header>
 
-        {/* Jump nav */}
-        <nav aria-label="Page sections" className="mb-14">
+        {/* Key stats */}
+        <KeyStats />
+
+        {/* Mobile TOC */}
+        <nav
+          aria-label="Page sections"
+          className="glass relative overflow-hidden rounded-2xl mb-10 p-5 lg:hidden"
+        >
           <p className="eyebrow text-muted mb-3">On this page</p>
           <ol className="space-y-1.5">
             {SECTIONS.map((s, i) => (
               <li key={s.id}>
                 <a
                   href={`#${s.id}`}
-                  className="flex items-center gap-3 text-sm text-muted hover:text-accent transition-colors group"
+                  className="text-sm text-ink/80 hover:text-accent underline underline-offset-2 decoration-line"
                 >
-                  <span className="text-xs tabular-nums text-muted/50 group-hover:text-accent/60 w-5">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  {s.label}
+                  {i + 1}. {s.label}
                 </a>
               </li>
             ))}
           </ol>
         </nav>
 
-        {/* ── 1. Clinically proven ─────────────────────────────────────── */}
-        <section id="clinically-proven" className="mb-16 scroll-mt-24">
-          <SectionHeading number="01" title='"Clinically proven" means almost nothing' />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              The phrase "clinically proven" appears on a huge proportion of skincare
-              products. It sounds like a regulated claim backed by peer-reviewed
-              science. In the cosmetics industry, it is not. No regulatory body in
-              the US or EU restricts what a brand can call "clinically proven" on a
-              cosmetic product.
-            </p>
-            <p>
-              In practice, the phrase can be supported by almost anything: a 12-person
-              consumer perception survey, a single unpublished internal test, a
-              non-peer-reviewed study funded by the brand, or a questionnaire asking
-              people whether they <em>felt</em> their skin looked better. All of these
-              can become "clinically proven" in marketing copy.
-            </p>
-            <EvidenceSpectrum />
-            <Callout variant="what-to-look-for">
-              <strong>What actually carries weight:</strong> Independent peer-reviewed
-              trials published in journals like the Journal of the American Academy
-              of Dermatology or the British Journal of Dermatology. Look for sample
-              size (ideally 50+ participants), a control group, blinding (participants
-              didn&apos;t know which treatment they received), and researcher independence
-              from the brand. When a brand cites a study, check whether they funded it
-              and whether it has been independently replicated.
-            </Callout>
-            <p>
-              This does not mean products making "clinically proven" claims cannot
-              work. It means the claim itself tells you nothing. Evaluate the active
-              ingredients and their concentrations instead — those are the variables
-              with actual evidence behind them.
-            </p>
-          </div>
-        </section>
+        {/* Two-column layout */}
+        <div className="lg:grid lg:grid-cols-[1fr_200px] lg:gap-16 lg:items-start">
+          <div className="space-y-3">
 
-        {/* ── 2. EU vs US ──────────────────────────────────────────────── */}
-        <section id="eu-us-gap" className="mb-16 scroll-mt-24">
-          <SectionHeading number="02" title="The EU has banned ~1,400 cosmetic ingredients. The US has restricted 11." />
-          <RegulationGap />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              This statistic is widely cited and broadly accurate. The EU Cosmetics
-              Regulation (EC No 1223/2009) maintains Annex II, a list of substances
-              prohibited in cosmetic products sold in Europe. It currently contains
-              around 1,400 entries. The FDA&apos;s equivalent list has 11 categories
-              of restricted or prohibited ingredients.
-            </p>
-            <p>
-              The regulatory philosophy behind the gap matters more than the
-              numbers. The EU applies a precautionary principle: if an ingredient
-              raises credible safety concerns — even without definitive proof of
-              harm at cosmetic doses — it can be restricted pending further evidence.
-              The US applies a risk-based approach: ingredients are generally permitted
-              unless evidence of harm at the doses being used is established.
-            </p>
-            <Callout variant="important">
-              <strong>What this gap does not mean:</strong> A banned-in-EU ingredient
-              is not automatically dangerous when used in a US cosmetic. Many EU
-              restrictions are precautionary, not based on evidence of harm at
-              real-world cosmetic concentrations. Parabens, for example, are heavily
-              restricted in EU baby products — but the scientific consensus from
-              bodies including the EU&apos;s own Scientific Committee on Consumer Safety
-              (SCCS) is that parabens at typical cosmetic concentrations do not pose
-              a health risk. The EU restriction reflects political caution, not
-              established harm.
-            </Callout>
-            <p>
-              The practical implication: the EU/US gap is a useful starting point for
-              questions, not a verdict. When an ingredient is restricted in the EU,
-              the right response is to look at why — the SCCS opinions are publicly
-              available and readable. Some EU decisions are well-supported by evidence.
-              Others are precautionary calls that the science does not strongly back.
-              Treat each on its merits.
-            </p>
-          </div>
-        </section>
+            {/* 01 — Clinically proven */}
+            <CollapsibleSection id="clinically-proven" label='"Clinically proven" means almost nothing' sectionNumber={1}>
+              <div className="space-y-4">
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  No regulatory body in the US or EU restricts what brands can call "clinically proven" on a
+                  cosmetic product. A 12-person perception survey, an unpublished internal test, or a
+                  brand-funded questionnaire asking whether participants <em>felt</em> their skin looked better
+                  — all can legally appear on packaging as "clinically proven."
+                </p>
+                <EvidenceSpectrum />
+                <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-ink/80 leading-relaxed">
+                  <strong className="text-ink">What carries weight:</strong> Independent peer-reviewed RCTs with 50+
+                  participants, a control group, blinding, and no brand funding conflict. Check the active
+                  ingredient and concentration — those variables have actual evidence behind them.
+                </div>
+              </div>
+            </CollapsibleSection>
 
-        {/* ── 3. Derm-endorsed ─────────────────────────────────────────── */}
-        <section id="derm-endorsed" className="mb-16 scroll-mt-24">
-          <SectionHeading number="03" title='"Dermatologist recommended" is a marketing category, not a clinical standard' />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              "Dermatologist recommended," "dermatologist tested," and
-              "dermatologist approved" appear on products across every price point.
-              None of these phrases is regulated in the US or EU. There is no
-              minimum number of dermatologists required, no standard testing
-              protocol, and no independent body verifying the claim.
-            </p>
-            <p>
-              "Dermatologist tested" typically means a dermatologist reviewed the
-              formula or applied it to skin under supervised conditions —
-              it says nothing about efficacy. "Dermatologist recommended" can be
-              supported by a single paid endorsement from a single clinician.
-              "Dermatologist approved" has no standard meaning at all.
-            </p>
-            <p>
-              Paid dermatologist partnerships are common and legal. A brand can pay
-              a board-certified dermatologist to endorse their product, and that
-              dermatologist is not required to disclose the relationship in the same
-              way an influencer is under FTC rules — though FTC guidelines do
-              require material connection disclosures in social media contexts.
-              The product packaging itself carries no such requirement.
-            </p>
-            <Callout variant="what-to-look-for">
-              <strong>What to look for instead:</strong> Dermatologists publishing
-              independent research in peer-reviewed journals, contributing to
-              clinical guidelines (AAD, BSAD), or commenting on studies they have
-              no financial relationship with. A dermatologist&apos;s endorsement on
-              packaging tells you they agreed to be paid. A dermatologist&apos;s
-              published research tells you something about what they actually found.
-            </Callout>
-          </div>
-        </section>
+            {/* 02 — EU vs US */}
+            <CollapsibleSection id="eu-us-gap" label="The EU has banned ~1,400 cosmetic ingredients. The US has restricted 11." sectionNumber={2}>
+              <div className="space-y-4">
+                <RegulationGap />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  The gap reflects regulatory philosophy, not a difference in ingredient danger. The EU applies a
+                  precautionary principle — restrict first, verify later. The US requires demonstrated harm at
+                  cosmetic doses before acting. A bigger EU list doesn't mean US products are unsafe.
+                </p>
+                <div className="rounded-xl border border-amber-200 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 leading-relaxed">
+                  <strong>Parabens:</strong> EU-restricted in baby products, but the EU's own SCCS found
+                  parabens at cosmetic concentrations pose no health risk. Many "paraben-free" replacements
+                  have shorter safety histories. When an ingredient is EU-restricted, look at <em>why</em>.
+                </div>
+              </div>
+            </CollapsibleSection>
 
-        {/* ── 4. Influencers ───────────────────────────────────────────── */}
-        <section id="influencers" className="mb-16 scroll-mt-24">
-          <SectionHeading number="04" title="How influencer skincare economics work" />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              Influencer skincare recommendations exist within a commercial
-              ecosystem. Understanding how it works does not require cynicism —
-              it just requires knowing what you are looking at.
-            </p>
-            <p>
-              The primary structures are: paid partnerships (the brand pays the
-              creator a flat fee or percentage of sales to promote a product),
-              gifting (products are sent free in exchange for coverage, which may
-              or may not be disclosed), and affiliate codes (the creator earns a
-              commission on purchases made through their link). All three are
-              legal. Paid partnerships and affiliate arrangements are required to
-              be disclosed under FTC guidelines in the US — the requirement is
-              "clear and conspicuous" disclosure, not a small-print footnote.
-            </p>
-            <p>
-              The deeper issue is not corruption but incentive structure. A creator
-              whose income depends on brand partnerships is structurally incentivised
-              to produce positive content about those brands, independent of whether
-              the products work. This does not mean every paid recommendation is
-              dishonest — many creators genuinely believe in what they promote. It
-              means the incentive for positive coverage exists regardless of product
-              quality, and your calibration of a recommendation should account for
-              that.
-            </p>
-            <InfluencerFlow />
-            <Callout variant="important">
-              <strong>The testimonial problem:</strong> Personal skincare testimonials
-              — "this changed my skin" — are not evidence of efficacy. Skin changes
-              over time due to seasonal variation, diet, stress, hormones, sleep, and
-              other product interactions. A creator attributing a visible skin change
-              to one product after using it for four weeks may be entirely sincere
-              and entirely wrong about the cause. This is why clinical trials use
-              control groups — human perception of causation is unreliable.
-            </Callout>
-            <p>
-              None of this means influencer content has no value. Tutorials, texture
-              reviews, and formulation comparisons can be genuinely useful. The
-              question to hold is: does this person have a financial relationship
-              with this brand, and am I watching a testimonial or a demonstration?
-            </p>
-          </div>
-        </section>
+            {/* 03 — Derm-endorsed */}
+            <CollapsibleSection id="derm-endorsed" label='"Dermatologist recommended" is a marketing category, not a clinical standard' sectionNumber={3}>
+              <div className="space-y-4">
+                <DermClaimsTable />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  Paid dermatologist partnerships are common and legal. Product packaging carries no disclosure
+                  requirement for these relationships — only social media content requires FTC disclosure.
+                </p>
+                <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-ink/80 leading-relaxed">
+                  <strong className="text-ink">Meaningful vs. marketing:</strong> A dermatologist's published
+                  peer-reviewed research tells you what they found. A packaging endorsement tells you they agreed
+                  to be paid.
+                </div>
+              </div>
+            </CollapsibleSection>
 
-        {/* ── 5. Non-comedogenic ───────────────────────────────────────── */}
-        <section id="non-comedogenic" className="mb-16 scroll-mt-24">
-          <SectionHeading number="05" title='"Non-comedogenic" has no regulatory definition and no standard test' />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              "Non-comedogenic" means "does not block pores" and is one of the most
-              prominent claims in skincare for acne-prone skin. It is not a
-              regulated term. No certification body issues it. Brands self-apply it
-              on the basis of their own testing, or sometimes on the basis of no
-              testing at all.
-            </p>
-            <p>
-              The comedogenicity rating scale most often referenced — the Kligman
-              rabbit ear assay, developed in the 1970s — involves applying
-              concentrated ingredients to rabbit ear canals to assess follicular
-              plugging. The human relevance of this model is poor. The rabbit ear
-              canal is not anatomically equivalent to human facial skin. Many
-              ingredients rated comedogenic in rabbit ear studies do not cause
-              comedones in human clinical use, and vice versa.
-            </p>
-            <p>
-              Human comedogenicity testing exists but is expensive and infrequently
-              used. The most rigorous version involves applying a test formula to
-              the backs of human participants under occlusion for several weeks,
-              then biopsying follicles. Very few brands run this test before applying
-              the "non-comedogenic" label.
-            </p>
-            <Callout variant="what-to-look-for">
-              <strong>What this means practically:</strong> "Non-comedogenic" on a
-              label is a reasonable signal that the brand has thought about the
-              formulation — but it is not a guarantee. Individual skin response to
-              ingredients varies significantly. Patch testing a new product on a
-              small area for 2–3 weeks before full-face use remains the most reliable
-              way to determine whether a formula will clog your specific pores.
-            </Callout>
-          </div>
-        </section>
+            {/* 04 — Influencers */}
+            <CollapsibleSection id="influencers" label="How influencer skincare economics work" sectionNumber={4}>
+              <div className="space-y-4">
+                <InfluencerFlow />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  Paid partnerships and affiliate codes are required to be disclosed under FTC guidelines.
+                  The deeper issue isn't disclosure — it's incentive structure. A creator whose income depends
+                  on brand partnerships is structurally motivated to produce positive content regardless of
+                  product quality.
+                </p>
+                <div className="rounded-xl border border-amber-200 bg-amber-50/60 px-4 py-3 text-sm text-amber-900 leading-relaxed">
+                  <strong>Testimonials aren't evidence.</strong> Skin changes over weeks due to diet, hormones,
+                  sleep, and seasonal variation. Attributing a change to one product after 4 weeks may be sincere
+                  — and still wrong about the cause.
+                </div>
+              </div>
+            </CollapsibleSection>
 
-        {/* ── 6. Natural vs synthetic ──────────────────────────────────── */}
-        <section id="natural-vs-synthetic" className="mb-16 scroll-mt-24">
-          <SectionHeading number="06" title='"Natural" is a marketing category, not a safety category' />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              "Natural," "clean," and "green" are among the most commercially
-              successful terms in contemporary skincare marketing. None of them
-              has a regulatory definition in the US cosmetics market. The EU has
-              introduced some constraints on "organic" claims but "natural" and
-              "clean" remain self-defined by brands.
-            </p>
-            <p>
-              The implied premise — that natural origin correlates with safety and
-              synthetic origin correlates with risk — is not supported by the
-              evidence. Poison ivy, arsenic, lead, and botulinum toxin are natural.
-              The preservatives that prevent bacterial contamination in water-based
-              cosmetics are typically synthetic. Whether a substance is safe depends
-              on its molecular structure, concentration, and route of exposure —
-              not whether it originated in a plant or a laboratory.
-            </p>
-            <p>
-              Some of the most evidence-backed actives in skincare — retinol,
-              niacinamide, azelaic acid, glycolic acid — are either synthetic or
-              synthesised for consistency, because natural extraction cannot reliably
-              produce the purity and concentration that clinical trials demonstrated
-              efficacy at. A retinol derived from a plant source at an unspecified
-              concentration is not equivalent to synthetic retinol at 0.1%.
-            </p>
-            <Callout variant="important">
-              <strong>The parabens case:</strong> Parabens are synthetic preservatives
-              that have been progressively removed from formulations in response to
-              consumer concern. The concern originated from a 2004 study detecting
-              parabens in breast tumour tissue — but detection is not causation, and
-              the study drew no conclusions about parabens causing cancer. Subsequent
-              review by the EU&apos;s Scientific Committee on Consumer Safety found
-              parabens at cosmetic concentrations do not pose a health risk. Many
-              "paraben-free" products now use alternative preservatives with
-              shorter safety histories and less regulatory review. Removing a
-              well-studied, well-understood preservative in favour of newer
-              alternatives because it sounds cleaner is not necessarily a safety
-              improvement.
-            </Callout>
-            <p>
-              This is not a defence of all synthetic ingredients or a dismissal of
-              all natural ones. Some natural ingredients — plant oils, ceramides,
-              shea butter — have genuine evidence and are excellent formulation
-              choices. The point is that origin is not a proxy for safety or efficacy.
-              Evidence is.
-            </p>
-          </div>
-        </section>
+            {/* 05 — Non-comedogenic */}
+            <CollapsibleSection id="non-comedogenic" label='"Non-comedogenic" has no regulatory definition and no standard test' sectionNumber={5}>
+              <div className="space-y-4">
+                <ComedogenicityChain />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  The term is unregulated — brands self-apply it with their own testing, or no testing at all.
+                  The most-cited underlying data comes from 1970s rabbit ear assays that dermatologists
+                  widely criticise as poorly predictive of human comedone formation. Many ingredients flagged as
+                  high-comedogenicity by these assays cause no acne in human clinical use.
+                </p>
+                <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-ink/80 leading-relaxed">
+                  <strong className="text-ink">Most reliable test:</strong> Patch-test a new product on a small
+                  area for 2–3 weeks before full-face use. Your own skin is the only assay that matters.
+                </div>
+              </div>
+            </CollapsibleSection>
 
-        {/* ── 7. Price gap ─────────────────────────────────────────────── */}
-        <section id="price-gap" className="mb-16 scroll-mt-24">
-          <SectionHeading number="07" title="Does price correlate with efficacy in skincare?" />
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p>
-              The honest answer is: often not, but sometimes yes, and rarely for
-              the reasons marketing implies.
-            </p>
-            <p>
-              The active ingredients that drive most of the measurable skin benefit
-              in skincare — retinoids, niacinamide, AHAs, vitamin C, salicylic acid,
-              ceramides — are inexpensive to produce. A 5% niacinamide formulation
-              does the same biological work whether it costs £8 or £80. The
-              underlying mechanism does not change based on the packaging.
-            </p>
-            <p>
-              What higher prices frequently reflect: brand positioning and marketing
-              spend, packaging materials and retail margins, fragrance and texture
-              ingredients that improve the experience but not the outcome, small-batch
-              or artisan production, and prestige perception. None of these reliably
-              improve clinical efficacy.
-            </p>
-            <p>
-              Where price can legitimately correlate with quality: formulation
-              stability. Vitamin C (L-ascorbic acid) is notoriously unstable and
-              requires careful encapsulation or anhydrous formulation to reach the
-              skin in active form. Some cheaper vitamin C products degrade before
-              use. Retinoids similarly vary in delivery system quality. In these
-              cases, a more expensive formulation may genuinely deliver more of the
-              active — but the relevant question is the formulation approach and
-              stability testing, not the price point.
-            </p>
-            <PriceVsIngredient />
-            <Callout variant="what-to-look-for">
-              <strong>How to evaluate:</strong> Check the active ingredient, its
-              concentration, and its position in the ingredient list (ingredients
-              are listed in descending order by weight in both the US and EU). A
-              product listing niacinamide in the top five ingredients at an
-              evidence-based concentration will outperform a prestige product
-              listing it at the bottom. Price is not a reliable proxy for this
-              information — the ingredient list is.
-            </Callout>
-          </div>
-        </section>
+            {/* 06 — Natural vs synthetic */}
+            <CollapsibleSection id="natural-vs-synthetic" label='"Natural" is a marketing category, not a safety category' sectionNumber={6}>
+              <div className="space-y-4">
+                <NaturalVsSynthetic />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  "Natural," "clean," and "green" have no regulatory definition in US cosmetics. Whether a
+                  substance is safe depends on its molecular structure, concentration, and exposure route —
+                  not whether it came from a plant or a lab. Some of the most evidence-backed actives in
+                  skincare (retinol, niacinamide, glycolic acid) are synthesised for the purity and
+                  concentration that clinical trials demonstrated efficacy at.
+                </p>
+              </div>
+            </CollapsibleSection>
 
-        {/* Footer callout */}
-        <div className="border-t border-line pt-10 mt-10">
-          <p className="text-sm text-muted leading-relaxed mb-6">
+            {/* 07 — Price gap */}
+            <CollapsibleSection id="price-gap" label="Does price correlate with efficacy in skincare?" sectionNumber={7}>
+              <div className="space-y-4">
+                <PriceVsIngredient />
+                <p className="text-sm text-ink/80 leading-relaxed">
+                  Active ingredients — retinoids, niacinamide, AHAs, vitamin C, ceramides — are inexpensive
+                  to produce. Higher prices typically reflect brand positioning, packaging, fragrance, and
+                  marketing spend. Where price can legitimately correlate with quality: formulation stability
+                  for unstable actives like vitamin C and retinoids, where delivery system matters.
+                </p>
+                <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-ink/80 leading-relaxed">
+                  <strong className="text-ink">How to evaluate:</strong> Check the active ingredient,
+                  its concentration, and its position in the INCI list (listed highest to lowest by weight).
+                  Price is not a proxy for any of this information.
+                </div>
+              </div>
+            </CollapsibleSection>
+          </div>
+
+          {/* Sticky desktop TOC */}
+          <aside className="hidden lg:block sticky top-24">
+            <p className="eyebrow text-muted mb-3">On this page</p>
+            <ol className="space-y-1.5">
+              {SECTIONS.map((s, i) => (
+                <li key={s.id}>
+                  <a
+                    href={`#${s.id}`}
+                    className="flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors group"
+                  >
+                    <span className="text-xs tabular-nums text-muted/40 group-hover:text-accent/50 w-5 shrink-0">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        </div>
+
+        {/* Compare ingredients CTA */}
+        <CompareIngredientsCTA />
+
+        {/* Footer */}
+        <div className="border-t border-line pt-8 mt-8">
+          <p className="text-xs text-muted leading-relaxed">
             Every claim on this page is sourced from publicly available regulatory
             documentation, peer-reviewed research, or primary FTC/EU guidance.
-            Where evidence is contested or evolving, we have tried to represent
-            that accurately. If you spot an error or a claim that should be
-            updated, the right thing to do is flag it.
+            If you spot an error, flag it.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/ingredients"
-              className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
-            >
-              Ingredient library →
-            </Link>
-            <Link
-              href="/ingredients/compare"
-              className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
-            >
-              Compare two ingredients →
-            </Link>
-            <Link
-              href="/learn"
-              className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
-            >
-              Learning hub →
-            </Link>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+// ── Key stats grid ────────────────────────────────────────────────────────────
+function KeyStats() {
+  const stats = [
+    { value: '0', label: 'Legal definitions for "clean," "natural," or "non-comedogenic"', sub: 'Any brand can self-apply these terms' },
+    { value: '~1,400', label: 'EU-prohibited cosmetic substances', sub: 'vs. 11 US-restricted categories' },
+    { value: '1', label: 'Minimum dermatologist endorsement for "derm-recommended"', sub: 'No standard. No verification.' },
+    { value: '0', label: 'Premarket safety approvals required for US cosmetics', sub: 'Brands self-certify product safety' },
+  ]
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+      {stats.map((s, i) => (
+        <div key={i} className="glass rounded-2xl p-4 text-center">
+          <div className="font-display text-3xl font-bold text-accent leading-none mb-1">{s.value}</div>
+          <div className="text-xs font-semibold text-ink leading-snug mb-1">{s.label}</div>
+          <div className="text-[0.65rem] text-muted leading-snug">{s.sub}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// ── Compare CTA ───────────────────────────────────────────────────────────────
+function CompareIngredientsCTA() {
+  return (
+    <div className="mt-10 mb-4">
+      <Link
+        href="/ingredients/compare"
+        className="group block glass sheen relative overflow-hidden rounded-2xl border border-accent/20 hover:border-accent/50 transition-all p-6"
+      >
+        <div className="relative z-10 flex items-start gap-5">
+          <div className="shrink-0 h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center text-2xl">
+            ⚗️
+          </div>
+          <div className="min-w-0">
+            <p className="eyebrow text-accent mb-1">Interactive tool</p>
+            <h2 className="font-display text-xl font-semibold text-ink mb-1.5 group-hover:text-accent transition-colors">
+              Compare Two Ingredients Side-by-Side
+            </h2>
+            <p className="text-sm text-muted leading-relaxed">
+              Select any two actives and see evidence quality, effective concentrations,
+              and how their mechanisms compare — evidence, not marketing.
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+              Open comparison tool
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
           </div>
         </div>
-      </article>
-    </main>
+      </Link>
+
+      <div className="flex gap-3 mt-3">
+        <Link
+          href="/ingredients"
+          className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
+        >
+          Ingredient library →
+        </Link>
+        <Link
+          href="/learn"
+          className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
+        >
+          Learning hub →
+        </Link>
+      </div>
+    </div>
   )
 }
 
@@ -406,11 +297,11 @@ function EvidenceSpectrum() {
   const levels = [
     { label: 'Consumer perception survey', sub: 'e.g. "felt smoother"', weight: 'Weakest', color: '#e5e0d8' },
     { label: 'Unpublished internal test', sub: 'brand-run, not peer-reviewed', weight: 'Weak', color: '#d4c9ba' },
-    { label: 'Industry-funded study', sub: 'may be peer-reviewed but check conflicts', weight: 'Moderate', color: '#a8c9b0' },
+    { label: 'Industry-funded study', sub: 'may be peer-reviewed — check conflicts', weight: 'Moderate', color: '#a8c9b0' },
     { label: 'Independent RCT, published', sub: '50+ participants, control group, blinded', weight: 'Strong', color: '#46c08a' },
   ]
   return (
-    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
       <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
         <p className="eyebrow text-muted text-[0.6rem]">Evidence quality — what "clinically proven" might mean</p>
       </div>
@@ -435,27 +326,57 @@ function EvidenceSpectrum() {
   )
 }
 
-// ── Infographic: EU vs US banned ingredients ──────────────────────────────────
+// ── Infographic: EU vs US regulation ─────────────────────────────────────────
 function RegulationGap() {
   return (
-    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
       <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
-        <p className="eyebrow text-muted text-[0.6rem]">Restricted/prohibited cosmetic ingredients</p>
+        <p className="eyebrow text-muted text-[0.6rem]">Restricted / prohibited cosmetic ingredients</p>
       </div>
       <div className="grid grid-cols-2 divide-x divide-line/40">
         <div className="p-5 text-center">
           <div className="font-display text-5xl font-bold text-accent leading-none mb-1">~1,400</div>
-          <div className="text-sm font-semibold text-ink">EU banned/restricted</div>
+          <div className="text-sm font-semibold text-ink">EU banned / restricted</div>
           <div className="text-xs text-muted mt-1 leading-snug">Annex II, EC No 1223/2009<br />Precautionary principle</div>
         </div>
         <div className="p-5 text-center">
           <div className="font-display text-5xl font-bold text-muted leading-none mb-1">11</div>
           <div className="text-sm font-semibold text-ink">US restricted categories</div>
-          <div className="text-xs text-muted mt-1 leading-snug">FDA OTC monograph<br />Risk-based approach</div>
+          <div className="text-xs text-muted mt-1 leading-snug">FDA cosmetics regulation<br />Risk-based approach</div>
         </div>
       </div>
       <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
-        <p className="text-[0.65rem] text-muted">A larger EU list does not automatically mean EU products are safer — many EU bans are precautionary, not evidence-based</p>
+        <p className="text-[0.65rem] text-muted">A larger EU list ≠ safer products — many EU bans are precautionary, not evidence-based</p>
+      </div>
+    </figure>
+  )
+}
+
+// ── Infographic: Derm claim ladder ────────────────────────────────────────────
+function DermClaimsTable() {
+  const claims = [
+    { label: 'Dermatologist tested', what: 'A derm reviewed or applied the formula', requires: 'Minimum 1 dermatologist', regulated: false },
+    { label: 'Dermatologist recommended', what: 'At least one derm endorsed the product', requires: 'Minimum 1 paid endorsement', regulated: false },
+    { label: 'Dermatologist approved', what: 'No standard definition exists', requires: 'Nothing — self-applied', regulated: false },
+    { label: 'FDA-approved drug claim', what: 'Clinical proof of efficacy for a medical condition', requires: 'Rigorous clinical trials', regulated: true },
+  ]
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">What each "dermatologist" claim actually requires</p>
+      </div>
+      <div className="divide-y divide-line/40">
+        {claims.map((c, i) => (
+          <div key={i} className="flex items-start gap-3 px-4 py-3">
+            <span className={`mt-0.5 shrink-0 text-[0.6rem] font-bold px-1.5 py-0.5 rounded ${c.regulated ? 'bg-accent/15 text-accent' : 'bg-amber-50 text-amber-700'}`}>
+              {c.regulated ? 'REGULATED' : 'UNREGULATED'}
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-ink">{c.label}</p>
+              <p className="text-xs text-muted mt-0.5">{c.requires}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </figure>
   )
@@ -464,7 +385,7 @@ function RegulationGap() {
 // ── Infographic: Influencer money flow ────────────────────────────────────────
 function InfluencerFlow() {
   return (
-    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
       <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
         <p className="eyebrow text-muted text-[0.6rem]">How influencer skincare economics work</p>
       </div>
@@ -502,6 +423,93 @@ function InfluencerFlow() {
   )
 }
 
+// ── Infographic: Non-comedogenic claim chain ──────────────────────────────────
+function ComedogenicityChain() {
+  const steps = [
+    { icon: '🐰', label: '1970s rabbit ear assay', sub: 'Concentrated ingredient applied to rabbit ear canal' },
+    { icon: '📋', label: 'Comedogenicity score', sub: 'Ingredient assigned a 0–5 rating' },
+    { icon: '🌐', label: 'Published on websites', sub: 'CosDNA, Paula\'s Choice, etc. list the score' },
+    { icon: '🏭', label: 'Brands avoid it', sub: '"This product contains no high-comedogenicity ingredients"' },
+    { icon: '🏷️', label: '"Non-comedogenic" label', sub: 'Often with no human testing conducted' },
+  ]
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">How a 1970s rabbit study ends up on your moisturiser</p>
+      </div>
+      <div className="p-4">
+        <div className="flex flex-col gap-0">
+          {steps.map((s, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className="flex flex-col items-center shrink-0">
+                <div className="h-8 w-8 rounded-full bg-sand/80 border border-line/60 flex items-center justify-center text-base">{s.icon}</div>
+                {i < steps.length - 1 && <div className="w-px h-3 bg-line/40" />}
+              </div>
+              <div className="pb-3 min-w-0">
+                <p className="text-sm font-medium text-ink leading-tight">{s.label}</p>
+                <p className="text-xs text-muted mt-0.5">{s.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
+        <p className="text-[0.65rem] text-muted">Rabbit ear canal ≠ human facial skin. Human comedogenicity testing exists but is rarely conducted</p>
+      </div>
+    </figure>
+  )
+}
+
+// ── Infographic: Natural vs synthetic examples ────────────────────────────────
+function NaturalVsSynthetic() {
+  const natural = [
+    { name: 'Poison ivy', tag: 'Natural' },
+    { name: 'Arsenic', tag: 'Natural' },
+    { name: 'Lead', tag: 'Natural' },
+    { name: 'Botulinum toxin', tag: 'Natural' },
+  ]
+  const synthetic = [
+    { name: 'Niacinamide', tag: 'Synthetic / synthesised' },
+    { name: 'Retinol (OTC)', tag: 'Synthesised for purity' },
+    { name: 'Glycolic acid', tag: 'Synthesised' },
+    { name: 'Phenoxyethanol', tag: 'Synthetic preservative' },
+  ]
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">Origin ≠ safety</p>
+      </div>
+      <div className="grid grid-cols-2 divide-x divide-line/40">
+        <div className="p-4">
+          <p className="text-xs font-semibold text-amber-700 mb-2">❌ Natural &amp; harmful</p>
+          <ul className="space-y-1.5">
+            {natural.map((n, i) => (
+              <li key={i} className="text-xs text-ink/80">
+                <span className="font-medium">{n.name}</span>
+                <span className="text-muted ml-1">({n.tag})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="p-4">
+          <p className="text-xs font-semibold text-accent mb-2">✓ Synthetic &amp; evidence-backed</p>
+          <ul className="space-y-1.5">
+            {synthetic.map((n, i) => (
+              <li key={i} className="text-xs text-ink/80">
+                <span className="font-medium">{n.name}</span>
+                <span className="text-muted ml-1">({n.tag})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
+        <p className="text-[0.65rem] text-muted">Safety depends on molecular structure, concentration, and exposure — not origin</p>
+      </div>
+    </figure>
+  )
+}
+
 // ── Infographic: Price vs active ingredient reality ───────────────────────────
 function PriceVsIngredient() {
   const products = [
@@ -510,7 +518,7 @@ function PriceVsIngredient() {
     { name: 'Tatcha The Dewy Skin Cream', price: '~£85', pct: 'unlisted', brand: 'luxury', verdict: 'Concentration not disclosed' },
   ]
   return (
-    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+    <figure className="rounded-2xl border border-line/60 overflow-hidden">
       <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
         <p className="eyebrow text-muted text-[0.6rem]">Niacinamide — same active, very different prices</p>
       </div>
@@ -533,37 +541,5 @@ function PriceVsIngredient() {
         <p className="text-[0.65rem] text-muted">Check active concentration and ingredient list position — not the price tag</p>
       </div>
     </figure>
-  )
-}
-
-function SectionHeading({ number, title }: { number: string; title: string }) {
-  return (
-    <div className="mb-5 flex gap-4 items-start">
-      <span className="text-xs font-semibold tabular-nums text-muted/50 pt-1.5 shrink-0 w-6">
-        {number}
-      </span>
-      <h2 className="font-display text-2xl font-medium text-ink leading-snug">{title}</h2>
-    </div>
-  )
-}
-
-function Callout({
-  variant,
-  children,
-}: {
-  variant: 'what-to-look-for' | 'important'
-  children: React.ReactNode
-}) {
-  const isImportant = variant === 'important'
-  return (
-    <div
-      className={`rounded-xl border px-5 py-4 text-sm leading-relaxed ${
-        isImportant
-          ? 'border-amber-200 bg-amber-50/60 text-amber-900'
-          : 'border-accent/20 bg-accent/5 text-ink/80'
-      }`}
-    >
-      {children}
-    </div>
   )
 }

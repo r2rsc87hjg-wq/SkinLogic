@@ -7,6 +7,7 @@ import { AppLogoImg } from '@/components/scanner/AppLogoImg'
 import type { VerdictRating } from '@/components/scanner/VerdictBadge'
 import { VerdictBadge } from '@/components/scanner/VerdictBadge'
 import { SEED_SCANNERS } from '@/content/seed/scanners'
+import { CollapsibleAtAGlance } from '@/components/scanner/CollapsibleAtAGlance'
 
 export const metadata: Metadata = {
   title: 'Skincare App & Scanner Comparison',
@@ -112,7 +113,9 @@ export default async function AppScannerComparisonPage() {
         {scanners.length ? (
           <>
             <CategoryContrast />
-            <ComparisonTable scanners={scanners} />
+            <CollapsibleAtAGlance>
+              <ComparisonTable scanners={scanners} />
+            </CollapsibleAtAGlance>
             <div className="space-y-12">
               {groups.map(({ rating, items }) => (
                 <section key={rating}>
@@ -259,54 +262,57 @@ function ComparisonTable({ scanners }: { scanners: ScannerListItem[] }) {
   )
 
   return (
-    <section className="mb-12">
-      <h2 className="eyebrow text-muted mb-3">At a glance</h2>
-      <div className="glass overflow-hidden rounded-2xl">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-line bg-sand/40 text-left">
-                <th className="px-4 py-3 font-semibold text-ink">Tool</th>
-                <th className="px-4 py-3 font-semibold text-ink">What it is</th>
-                <th className="px-4 py-3 font-semibold text-ink">Verdict</th>
-                <th className="px-4 py-3 font-semibold text-ink">Best for</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((s) => {
-                const shortType = s.technology
-                  ? s.technology.split(/[—(]/)[0].trim()
-                  : '—'
-                return (
-                  <tr key={s._id} className="border-t border-line/60 align-top">
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <Link
-                        href={`/app-scanner-comparison/${s.slug}`}
-                        className="font-medium text-ink underline-offset-2 hover:text-accent hover:underline inline-flex items-center gap-2"
-                      >
-                        {s.domain && <AppLogoImg domain={s.domain} size={20} />}
-                        {s.name}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-muted">{shortType}</td>
-                    <td className="px-4 py-3">
-                      {s.verdictRating ? (
-                        <VerdictBadge rating={s.verdictRating} />
+    <div className="glass overflow-hidden rounded-2xl">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-line bg-sand/40 text-left">
+              <th className="px-4 py-3 font-semibold text-ink">Tool</th>
+              <th className="px-4 py-3 font-semibold text-ink">What it is</th>
+              <th className="px-4 py-3 font-semibold text-ink">Verdict</th>
+              <th className="px-4 py-3 font-semibold text-ink">Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((s) => {
+              const shortType = s.technology
+                ? s.technology.split(/[—(]/)[0].trim()
+                : '—'
+              return (
+                <tr key={s._id} className="border-t border-line/60 align-top">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Link
+                      href={`/app-scanner-comparison/${s.slug}`}
+                      className="font-medium text-ink underline-offset-2 hover:text-accent hover:underline inline-flex items-center gap-2"
+                    >
+                      {s.domain ? (
+                        <AppLogoImg domain={s.domain} size={20} />
                       ) : (
-                        <span className="text-muted">—</span>
+                        <span className="inline-flex h-5 w-5 rounded items-center justify-center bg-sand border border-line/60 text-[0.6rem] font-bold text-ink/50 shrink-0">
+                          {s.name.charAt(0).toUpperCase()}
+                        </span>
                       )}
-                    </td>
-                    <td className="px-4 py-3 text-muted">
-                      {s.worthItFor?.[0] ?? '—'}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+                      {s.name}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-muted">{shortType}</td>
+                  <td className="px-4 py-3">
+                    {s.verdictRating ? (
+                      <VerdictBadge rating={s.verdictRating} />
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-muted">
+                    {s.worthItFor?.[0] ?? '—'}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
-    </section>
+    </div>
   )
 }
 

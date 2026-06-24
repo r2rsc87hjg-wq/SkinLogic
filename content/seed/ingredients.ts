@@ -162,4 +162,112 @@ export const SEED_INGREDIENTS: SeedIngredient[] = [
     studyTypes: ['Human clinical trial', 'In vitro'],
     category: 'soothing',
   },
+  {
+    _id: 'seed-retinaldehyde',
+    name: 'Retinaldehyde',
+    slug: 'retinaldehyde',
+    summary:
+      'A vitamin A aldehyde that sits one metabolic step closer to retinoic acid than retinol, making it more potent at lower concentrations while remaining available without a prescription. Converts to retinoic acid in the skin more efficiently than retinol, producing comparable anti-aging and anti-acne effects with less irritation than prescription tretinoin. Human clinical trials show improvements in fine lines, skin texture, and acne comparable to lower-dose tretinoin. Effective at 0.05–0.1%; irritation is still possible and a slow introduction is recommended. Significantly more effective than retinol on a weight-for-weight basis, but less widely formulated due to stability challenges.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'anti-aging',
+  },
+  {
+    _id: 'seed-lactic-acid',
+    name: 'Lactic Acid',
+    slug: 'lactic-acid',
+    summary:
+      'An alpha-hydroxy acid (AHA) derived from fermented sugars with a larger molecular size than glycolic acid, resulting in more superficial penetration and better tolerance on sensitive skin. Beyond exfoliation, it has a secondary humectant effect — it is a component of the skin\'s natural moisturising factors (NMF). Human clinical trials show improvements in photoaging, hyperpigmentation, and skin texture. Preferred over glycolic acid for reactive and medium-to-deeper skin tones where glycolic acid can trigger post-inflammatory hyperpigmentation rather than fade it. Photosensitising — daily SPF is essential when using AHAs. Effective OTC range: 5–10%.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'exfoliant',
+  },
+  {
+    _id: 'seed-kojic-acid',
+    name: 'Kojic Acid',
+    slug: 'kojic-acid',
+    summary:
+      'A fungal metabolite (produced by Aspergillus and Penicillium species) that inhibits tyrosinase — the rate-limiting enzyme in melanin synthesis. Human clinical trials confirm it reduces hyperpigmentation, melasma, and post-inflammatory darkening; comparable to 4% hydroquinone in some head-to-head studies. Typical OTC concentration: 1–4%. Key limitation: moderate sensitisation potential — some users develop contact dermatitis, making it unsuitable for sensitive skin. Generally well-tolerated at lower concentrations. Available without prescription in both EU and US markets; formulation stability is important as it degrades in light and air.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'brightening',
+  },
+  {
+    _id: 'seed-panthenol',
+    name: 'Panthenol (Vitamin B5)',
+    slug: 'panthenol',
+    summary:
+      'A provitamin of pantothenic acid (B5) that penetrates the skin and converts to pantothenic acid, where it supports cellular metabolism, wound healing, and barrier repair. One of the most well-tolerated skincare ingredients across all skin types, including reactive and compromised skin. Acts as a humectant, drawing moisture to the skin surface; also has demonstrated anti-inflammatory and wound-healing properties in human studies. Commonly used at 1–5% in moisturisers and barrier creams. A genuinely multi-functional ingredient with a strong tolerability profile — one of the few actives that is almost universally well-received.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'humectant',
+  },
+  {
+    _id: 'seed-ferulic-acid',
+    name: 'Ferulic Acid',
+    slug: 'ferulic-acid',
+    summary:
+      'A hydroxycinnamic acid found in plant cell walls that is a potent antioxidant in its own right and uniquely effective at stabilising and potentiating other antioxidants. When combined with 15% L-ascorbic acid and 1% tocopherol (vitamin E), ferulic acid at 0.5% has been shown in human studies to double the photoprotective effect of the combination and significantly improve its stability — formulations containing all three remain active for considerably longer. On its own, it scavenges reactive oxygen species from UV exposure. Most commonly seen as a supporting ingredient in vitamin C serums rather than a primary active. High-concentration stand-alone ferulic acid products are rare.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'antioxidant',
+  },
+  {
+    _id: 'seed-squalane',
+    name: 'Squalane',
+    slug: 'squalane',
+    summary:
+      'A hydrogenated and stabilised form of squalene — a lipid naturally produced by human sebaceous glands that declines measurably with age. Squalane (not squalene) is stable for use in cosmetics and functions as a lightweight, non-greasy emollient that replenishes skin lipids and reduces transepidermal water loss without occluding pores. Human skin recognises it as a native lipid, making it exceptionally well-tolerated and non-comedogenic across most skin types. Sourced from olives, sugarcane, or sharks (the latter now largely discontinued). Human clinical evidence for barrier repair and skin softening is solid; typically used at 1–100% depending on the formulation. One of the most broadly compatible oils in skincare.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'barrier',
+  },
+  {
+    _id: 'seed-polyglutamic-acid',
+    name: 'Polyglutamic Acid',
+    slug: 'polyglutamic-acid',
+    summary:
+      'A naturally occurring biopolymer produced by Bacillus subtilis fermentation that can hold 4–5 times more water than hyaluronic acid by weight. Unlike most molecular weights of hyaluronic acid, it primarily forms a film on the skin surface, preventing moisture evaporation rather than penetrating to deliver hydration from within. This film-forming property also helps retain hyaluronic acid at the skin surface, making it a useful combination ingredient. Human clinical evidence is growing but thinner than the hyaluronic acid literature. Well-tolerated and suitable for all skin types. Most effective used alongside humectants rather than as a standalone hydration strategy.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'humectant',
+  },
+  {
+    _id: 'seed-allantoin',
+    name: 'Allantoin',
+    slug: 'allantoin',
+    summary:
+      'A naturally occurring compound (found in comfrey root and produced endogenously in most organisms) with documented keratolytic, wound-healing, and soothing properties. It promotes skin cell proliferation and accelerates healing of minor irritations and abrasions — used in clinical wound care formulations. Has mild keratolytic activity at higher concentrations, softening rough skin and helping shed dead cells more smoothly than exfoliants alone. Exceptional tolerability — one of the most widely used soothing agents in cosmetics, particularly in products designed for post-procedure skin, sensitive skin, and barrier repair. Effective at 0.5–2%; FDA-recognised as a skin protectant at these concentrations.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'soothing',
+  },
+  {
+    _id: 'seed-zinc',
+    name: 'Zinc (Topical)',
+    slug: 'zinc',
+    summary:
+      'Zinc in skincare primarily appears as zinc oxide (in sunscreen) or zinc acetate/pyrithione/gluconate (in acne and anti-dandruff products). As an acne treatment, zinc reduces sebum production, inhibits Cutibacterium acnes colonisation, and has direct anti-inflammatory activity. Human RCTs confirm efficacy for mild-to-moderate inflammatory acne; zinc sulfate oral supplementation has stronger evidence but GI side effects limit use. Topical zinc is less effective than benzoyl peroxide or topical antibiotics but a useful adjunct, particularly for those unable to tolerate stronger actives. Zinc pyrithione (at 1–2%) is FDA-approved for seborrheic dermatitis and dandruff. Zinc oxide is also a physical UV filter with broad-spectrum coverage.',
+    studyTypes: ['Human clinical trial', 'Meta-analysis'],
+    category: 'acne',
+  },
+  {
+    _id: 'seed-resveratrol',
+    name: 'Resveratrol',
+    slug: 'resveratrol',
+    summary:
+      'A polyphenol antioxidant found in red grape skin, berries, and Japanese knotweed. It neutralises free radicals, has anti-inflammatory properties, and in vitro data suggests it activates sirtuin pathways involved in cellular repair. Much of the excitement around resveratrol originated from oral supplementation research — the topical evidence base is thinner, though growing. Human studies confirm it reduces oxidative stress markers in skin and may enhance the effectiveness of other antioxidants (particularly vitamin C and vitamin E) in combination serums. Bioavailability challenge: it degrades rapidly in light and air, making formulation quality critical. Typically used at 0.1–1% in stable encapsulated or anhydrous formulations.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'antioxidant',
+  },
+  {
+    _id: 'seed-licorice-root',
+    name: 'Licorice Root Extract',
+    slug: 'licorice-root',
+    summary:
+      'An extract from Glycyrrhiza glabra containing multiple bioactive compounds, of which glabridin is the most studied for skin brightening. Glabridin inhibits tyrosinase and UVB-induced pigmentation, while glycyrrhizin has anti-inflammatory properties. Human clinical data shows reduction in hyperpigmentation and melasma, with a tolerability profile substantially better than hydroquinone — no risk of ochronosis or rebound hyperpigmentation on discontinuation. Licochalcone A (from a different licorice species) is widely used for its soothing and anti-inflammatory effects in sensitive skin products. Effective at reducing PIH and uneven tone with long-term use. Typically formulated at 0.5–2% standardised for glabridin content.',
+    studyTypes: ['Human clinical trial', 'In vitro'],
+    category: 'brightening',
+  },
+  {
+    _id: 'seed-colloidal-oatmeal',
+    name: 'Colloidal Oatmeal',
+    slug: 'colloidal-oatmeal',
+    summary:
+      'Finely milled Avena sativa (oat) that has been FDA-approved as a skin protectant since 2003 — one of the few cosmetic ingredients with an OTC drug monograph for eczema and dry, itchy skin. Active components include avenanthramides (potent anti-inflammatory polyphenols unique to oats), beta-glucans (which form a soothing film and have immunomodulatory properties), and lipids that support barrier repair. Human clinical trials confirm reduction in itch, erythema, and TEWL in atopic dermatitis. Among the most evidence-backed options for sensitive, reactive, and eczema-prone skin. Suitable for all ages including infants. Works synergistically with ceramides and niacinamide in barrier-repair formulations.',
+    studyTypes: ['Human clinical trial', 'Meta-analysis'],
+    category: 'soothing',
+  },
 ]

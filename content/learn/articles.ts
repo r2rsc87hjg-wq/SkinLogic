@@ -1810,7 +1810,6 @@ export const ARTICLES: Article[] = [
       ]},
       { type: 'callout', variant: 'note', text: 'Gym supplements — particularly whey protein and creatine — are associated with acne in some studies and anecdotal reports. If breakouts coincided with starting supplementation, trial removal of whey (switch to pea or rice protein) and observe over 8 weeks.' },
       { type: 'faq', items: [
-        { q: 'Does masturbation or sex affect acne?', a: 'No. This is a persistent myth with no scientific basis. Acne is not influenced by sexual activity.' },
         { q: 'I have tried everything — what next?', a: 'If OTC treatments have not worked after 12 weeks of consistent use, see a GP or dermatologist. Prescription tretinoin and oral options are significantly more effective and should not be a last resort.' },
       ]},
     ],
