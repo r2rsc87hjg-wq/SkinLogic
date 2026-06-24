@@ -113,9 +113,11 @@ export default async function AppScannerComparisonPage() {
         {scanners.length ? (
           <>
             <CategoryContrast />
-            <CollapsibleSection id="at-a-glance" label="At a glance" defaultOpen={false}>
-              <ComparisonTable scanners={scanners} />
-            </CollapsibleSection>
+            <div className="mb-12">
+              <CollapsibleSection id="at-a-glance" label="At a glance" defaultOpen={false}>
+                <ComparisonTable scanners={scanners} />
+              </CollapsibleSection>
+            </div>
             <div className="space-y-12">
               {groups.map(({ rating, items }) => (
                 <section key={rating}>
