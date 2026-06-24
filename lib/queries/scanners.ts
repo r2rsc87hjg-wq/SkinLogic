@@ -3,6 +3,8 @@ export const SCANNERS_LIST_QUERY = `
     _id,
     name,
     "slug": slug.current,
+    domain,
+    url,
     technology,
     verdictRating,
     verdict,

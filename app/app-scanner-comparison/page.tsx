@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { sanityFetch } from '@/lib/sanity'
 import { SCANNERS_LIST_QUERY } from '@/lib/queries'
 import { ScannerCard } from '@/components/scanner/ScannerCard'
+import { AppLogoImg } from '@/components/scanner/AppLogoImg'
 import type { VerdictRating } from '@/components/scanner/VerdictBadge'
 import { VerdictBadge } from '@/components/scanner/VerdictBadge'
 import { SEED_SCANNERS } from '@/content/seed/scanners'
@@ -19,6 +20,8 @@ interface ScannerListItem {
   _id: string
   name: string
   slug: string
+  domain?: string
+  url?: string
   technology?: string
   verdictRating?: VerdictRating
   verdict?: string
@@ -41,9 +44,15 @@ export default async function AppScannerComparisonPage() {
   )
 
   // Merge: CMS entries take precedence; seed fills any slug not yet in Sanity.
+  // For CMS entries missing domain/url, fall back to seed values for that slug.
+  const seedBySlug = Object.fromEntries(SEED_SCANNERS.map((s) => [s.slug, s]))
   const cmsSlugs = new Set((cmsScanners ?? []).map((s) => s.slug))
   const scanners: ScannerListItem[] = [
-    ...(cmsScanners ?? []),
+    ...(cmsScanners ?? []).map((s) => ({
+      ...s,
+      domain: s.domain ?? seedBySlug[s.slug]?.domain,
+      url: s.url ?? seedBySlug[s.slug]?.url,
+    })),
     ...SEED_SCANNERS.filter((s) => !cmsSlugs.has(s.slug)),
   ]
 
@@ -273,8 +282,9 @@ function ComparisonTable({ scanners }: { scanners: ScannerListItem[] }) {
                     <td className="px-4 py-3 whitespace-nowrap">
                       <Link
                         href={`/app-scanner-comparison/${s.slug}`}
-                        className="font-medium text-ink underline-offset-2 hover:text-accent hover:underline"
+                        className="font-medium text-ink underline-offset-2 hover:text-accent hover:underline inline-flex items-center gap-2"
                       >
+                        {s.domain && <AppLogoImg domain={s.domain} size={20} />}
                         {s.name}
                       </Link>
                     </td>

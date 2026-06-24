@@ -1529,6 +1529,292 @@ export const ARTICLES: Article[] = [
       ]},
     ],
   },
+
+  // ══════════════════════════════════════════
+  // PATH: DIET & SKIN
+  // ══════════════════════════════════════════
+
+  {
+    slug: 'diet-and-skin-overview',
+    title: 'How Your Diet Affects Your Skin',
+    summary: 'The evidence for what you eat showing up on your face — what is real, what is overhyped, and which foods have the most consistent research behind them.',
+    level: 'beginner', topic: 'Nutrition',
+    pathId: 'diet-and-skin', pathOrder: 1, xpReward: 40,
+    readingMinutes: 5, published: '2026-06-01',
+    related: ['gut-skin-axis', 'sugar-and-acne'],
+    body: [
+      { type: 'paragraph', text: 'The skin is your largest organ, and like every other organ it is built from what you eat. The evidence that diet influences skin health is real — but it is also far more nuanced than "eat this superfood for glowing skin." Some links are well-established (high-glycaemic diets and acne, omega-3s and inflammation). Others are overhyped or based on small, low-quality studies.' },
+      { type: 'heading', text: 'What the evidence actually shows', id: 'evidence' },
+      { type: 'list', items: [
+        'High-glycaemic diets — foods that spike blood sugar quickly (white bread, sugary drinks, processed snacks) — are associated with increased acne severity in multiple observational studies and at least two RCTs.',
+        'Omega-3 fatty acids (oily fish, flaxseed, walnuts) have anti-inflammatory effects that extend to the skin. Studies link higher omega-3 intake to reduced inflammatory acne and improved skin barrier function.',
+        'Antioxidants from vegetables and fruit (vitamins C and E, polyphenols, carotenoids) protect skin cells from UV-generated free radical damage. This is measurable in skin biopsies.',
+        'Dairy — particularly skim milk — is associated with acne in several large studies, though the mechanism is debated (hormones in milk, IGF-1 signalling, or processing methods).',
+        'Hydration: skin water content is influenced by total fluid intake, but the effect is modest in people who are not already dehydrated. Drinking more water does not replace moisturiser.',
+      ]},
+      { type: 'callout', variant: 'note', text: 'Most nutrition–skin studies are observational. They show associations, not causes. The best you can do is make reasonable adjustments and observe your own skin over 8–12 weeks — not chase every headline.' },
+      { type: 'heading', text: 'What is overhyped', id: 'overhyped' },
+      { type: 'list', items: [
+        '"Detox" foods and juices — the liver and kidneys handle detoxification. No food accelerates this.',
+        'Collagen supplements for skin: emerging evidence (small RCTs) shows some benefit for elasticity and hydration, but results are modest and study quality varies.',
+        'Any single "superfood" — the pattern of your whole diet matters far more than any individual food.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'Should I cut out dairy entirely?', a: 'Not necessarily. The association between dairy and acne is strongest for skim milk specifically. If you notice your skin improves when you reduce dairy, that is useful data. Otherwise, a full elimination is not warranted based on current evidence.' },
+        { q: 'Do I need to take supplements?', a: 'Most people eating a varied diet get adequate skin-relevant nutrients from food. Supplements become worth considering for deficiencies (vitamin D in low-sunlight climates, omega-3 if you eat no oily fish) — not as general enhancements.' },
+      ]},
+      { type: 'quiz', questions: [
+        { q: 'Which dietary pattern has the strongest evidence linking it to acne?', options: ['High-fat diet', 'High-glycaemic diet', 'Vegan diet', 'High-protein diet'], answer: 1, explanation: 'Multiple studies, including RCTs, have found that diets with a high glycaemic load are associated with increased acne severity.' },
+        { q: 'Does drinking more water noticeably improve skin?', options: ['Yes, dramatically', 'Only if already dehydrated', 'No effect at all', 'Only for oily skin'], answer: 1, explanation: 'Hydration matters when you are dehydrated, but for people with adequate intake, drinking extra water has a modest effect on skin water content at best.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'sugar-and-acne',
+    title: 'Sugar, Glycaemic Index, and Acne',
+    summary: 'Why high-sugar and high-GI diets are linked to breakouts — the insulin and IGF-1 pathway explained simply, and how to apply it to your diet.',
+    level: 'intermediate', topic: 'Nutrition',
+    pathId: 'diet-and-skin', pathOrder: 2, xpReward: 45,
+    readingMinutes: 5, published: '2026-06-03',
+    related: ['diet-and-skin-overview', 'understanding-acne', 'hormonal-acne-guide'],
+    prerequisiteSlug: 'diet-and-skin-overview',
+    body: [
+      { type: 'paragraph', text: 'The link between sugar and acne is one of the better-evidenced nutrition–skin connections. It works through a chain: high-GI foods spike blood glucose, which raises insulin, which triggers IGF-1 (insulin-like growth factor), which increases sebum production and skin-cell proliferation — two key drivers of acne.' },
+      { type: 'heading', text: 'The mechanism', id: 'mechanism' },
+      { type: 'list', items: [
+        'Insulin spike: high-GI foods (white bread, sugary drinks, crisps, rice cakes) cause a rapid rise in blood glucose and a corresponding insulin surge.',
+        'IGF-1 elevation: insulin raises IGF-1, a growth factor that stimulates oil glands to produce more sebum and accelerates the proliferation of skin cells in hair follicles — both contribute to clogged pores.',
+        'Androgen pathway: insulin also reduces the liver\'s production of sex hormone-binding globulin (SHBG), leaving more free androgens in circulation. Free androgens further stimulate sebum production.',
+        'Inflammation: high blood glucose directly promotes inflammatory signalling in the skin, worsening existing acne.',
+      ]},
+      { type: 'callout', variant: 'tip', title: 'The GI of a food is not fixed', text: 'Cooking method, food combinations, and portion size all change how quickly glucose enters the blood. White rice eaten with vegetables, protein, and fat has a lower effective GI than white rice alone.' },
+      { type: 'heading', text: 'What the studies show', id: 'studies' },
+      { type: 'paragraph', text: 'A 2007 RCT (Smith et al.) found that young men on a low-GI diet for 12 weeks had significantly fewer acne lesions than those on a high-GI control diet. A 2012 Korean study found similar results. These are small studies — but they are randomised controlled trials, the strongest type of evidence in nutrition research.' },
+      { type: 'heading', text: 'Practical changes', id: 'practical' },
+      { type: 'list', items: [
+        'Swap refined carbohydrates for whole-grain alternatives (brown rice, oats, wholegrain bread).',
+        'Reduce sugary drinks — these cause the sharpest insulin spikes of any food.',
+        'Add protein and fat to meals containing carbohydrates — this blunts the glycaemic response.',
+        'Snack on nuts, seeds, or vegetables rather than crisps, crackers, or sweets.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'How long until diet changes affect my acne?', a: 'Acne studies typically run 10–12 weeks. That aligns with a full skin-cell turnover cycle. Give any dietary change at least 8 weeks before judging its effect.' },
+        { q: 'Does fruit cause acne because it contains sugar?', a: 'Whole fruit has a low to moderate GI because the fibre slows sugar absorption. Fruit juice removes that fibre, so it has a much higher glycaemic impact. Eat fruit whole.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'gut-skin-axis',
+    title: 'The Gut–Skin Axis',
+    summary: 'Your gut microbiome and your skin are in constant communication. Here is what the research says about probiotics, prebiotics, and skin conditions.',
+    level: 'intermediate', topic: 'Nutrition',
+    pathId: 'diet-and-skin', pathOrder: 3, xpReward: 50,
+    readingMinutes: 6, published: '2026-06-05',
+    related: ['diet-and-skin-overview', 'eczema-trigger-and-repair', 'rosacea-management'],
+    prerequisiteSlug: 'sugar-and-acne',
+    body: [
+      { type: 'paragraph', text: 'The gut–skin axis refers to the bidirectional communication between your gut microbiome — the trillions of bacteria, fungi, and other microorganisms in your digestive tract — and your skin. It operates through immune signalling, the production of short-chain fatty acids, systemic inflammation, and hormonal pathways. The science is still developing, but several connections are now well-supported.' },
+      { type: 'heading', text: 'What is established', id: 'established' },
+      { type: 'list', items: [
+        'People with eczema (atopic dermatitis) have measurably different gut microbiome compositions to those without it. Dysbiosis (an imbalanced microbiome) is associated with increased intestinal permeability and systemic inflammation that worsens eczema.',
+        'Rosacea is associated with gut conditions including SIBO (small intestinal bacterial overgrowth) in some studies. Treating SIBO has produced skin improvement in small trials — causation is not confirmed, but the overlap is notable.',
+        'Acne: altered gut microbiome diversity is observed in acne patients in observational studies, though whether this is a cause or effect is unclear.',
+        'Probiotics: a 2021 meta-analysis found that oral probiotic supplementation reduced acne lesion counts, though study quality varied. Lactobacillus and Bifidobacterium strains are the most studied.',
+      ]},
+      { type: 'callout', variant: 'warning', title: 'This field moves fast', text: 'Much gut–skin research is still in early stages. Probiotic studies vary enormously in strains, doses, and duration. Do not interpret "probiotics can help skin" as "any probiotic will help your skin." Strain specificity matters.' },
+      { type: 'heading', text: 'Practical steps', id: 'practical' },
+      { type: 'list', items: [
+        'Eat a diverse range of plant foods — fibre variety is the strongest predictor of microbiome diversity.',
+        'Include fermented foods (yoghurt, kefir, sauerkraut, kimchi, kombucha) — these contain live bacteria shown in RCTs to improve microbiome diversity.',
+        'Limit ultra-processed foods — these reduce microbial diversity and increase inflammatory markers.',
+        'Avoid unnecessary antibiotics — they cause significant, sometimes lasting, disruption to the gut microbiome.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'Should I take a probiotic supplement for my skin?', a: 'The evidence is suggestive but not definitive enough to recommend a specific supplement. Fermented foods are a lower-risk, food-first approach. If you try a probiotic, look for one with Lactobacillus rhamnosus or Lactobacillus acidophilus — these are the most studied for skin outcomes.' },
+        { q: 'What is leaky gut and does it affect skin?', a: 'Leaky gut (increased intestinal permeability) is a real phenomenon where the gut lining becomes more permeable, allowing bacterial products into the bloodstream. It is associated with systemic inflammation. Whether it directly causes skin conditions is plausible but not firmly established.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'omega-3-and-skin',
+    title: 'Omega-3 Fatty Acids and Skin',
+    summary: 'Oily fish, flaxseed, walnuts — the anti-inflammatory fatty acids that have the most consistent evidence for skin health, and how much you actually need.',
+    level: 'beginner', topic: 'Nutrition',
+    pathId: 'diet-and-skin', pathOrder: 4, xpReward: 35,
+    readingMinutes: 4, published: '2026-06-07',
+    related: ['diet-and-skin-overview', 'eczema-trigger-and-repair'],
+    prerequisiteSlug: 'diet-and-skin-overview',
+    body: [
+      { type: 'paragraph', text: 'Omega-3 fatty acids — specifically EPA (eicosapentaenoic acid) and DHA (docosahexaenoic acid) from oily fish, and ALA (alpha-linolenic acid) from plant sources — are among the best-evidenced dietary interventions for skin health. They work primarily by reducing inflammation and supporting the skin barrier lipid matrix.' },
+      { type: 'heading', text: 'What they do for skin', id: 'mechanism' },
+      { type: 'list', items: [
+        'Anti-inflammatory: EPA competes with arachidonic acid in inflammatory pathways, reducing the production of pro-inflammatory eicosanoids. This translates to measurably lower inflammatory markers in skin biopsies after omega-3 supplementation.',
+        'Barrier support: DHA is a structural component of cell membranes. Adequate intake supports the skin\'s lipid barrier, reducing trans-epidermal water loss.',
+        'UV protection: omega-3s reduce UV-induced inflammation and DNA damage in the skin. Not a replacement for sunscreen — a supplement to it.',
+        'Acne: a 2012 Korean study found omega-3 supplementation (2g/day EPA+DHA) reduced both inflammatory and non-inflammatory acne lesions significantly over 10 weeks.',
+        'Eczema: multiple studies show improvement in eczema severity with omega-3 supplementation, likely through reduced systemic inflammation.',
+      ]},
+      { type: 'callout', variant: 'tip', title: 'EPA matters more than DHA for skin', text: 'When looking at supplements, a higher EPA:DHA ratio (e.g. 3:1 or 2:1) is more relevant for inflammatory skin conditions. Most standard fish oil capsules are roughly 1.5:1 EPA:DHA.' },
+      { type: 'heading', text: 'Food sources and amounts', id: 'sources' },
+      { type: 'list', items: [
+        'Salmon (farmed, 100g): ~2.5g EPA+DHA — one serving covers a week\'s worth at common supplement doses.',
+        'Mackerel (100g): ~2.6g EPA+DHA. Sardines, herring, and anchovies are also excellent.',
+        'Walnuts (30g): ~2.5g ALA — but ALA converts to EPA at only ~5–10% efficiency in humans. Plant omega-3 sources are not equivalent to fish.',
+        'Flaxseed oil (1 tbsp): ~7g ALA. Same conversion caveat applies.',
+        'Algae-based DHA supplements: the direct plant-based alternative for those who do not eat fish.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'How long until I see skin benefits from omega-3s?', a: 'Studies showing skin benefits typically run 10–16 weeks. The anti-inflammatory effect takes time to accumulate in cell membranes. Expect at least 3 months before evaluating the effect.' },
+        { q: 'Can I take fish oil with my other supplements?', a: 'Fish oil has a mild blood-thinning effect at high doses. At typical doses (1–3g/day), this is not a concern for most people. If you take blood thinners or have a clotting condition, check with your GP.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'vitamins-for-skin',
+    title: 'Which Vitamins Actually Help Your Skin',
+    summary: 'Vitamin C, D, E, A, zinc — sorted by evidence strength. What deficiencies matter, what supplementation does, and what is a waste of money.',
+    level: 'beginner', topic: 'Nutrition',
+    pathId: 'diet-and-skin', pathOrder: 5, xpReward: 40,
+    readingMinutes: 5, published: '2026-06-09',
+    related: ['diet-and-skin-overview', 'zinc-for-skin', 'vitamin-c-guide'],
+    prerequisiteSlug: 'omega-3-and-skin',
+    body: [
+      { type: 'paragraph', text: 'The vitamin and supplement industry is enormous — and most of what it sells for "skin health" is unsupported by meaningful evidence. A few vitamins genuinely matter for skin, primarily when you are deficient. Supplementing beyond what your diet already provides rarely produces dramatic results.' },
+      { type: 'heading', text: 'Vitamins with real evidence', id: 'evidence' },
+      { type: 'list', items: [
+        'Vitamin D: deficiency is associated with eczema, psoriasis, and impaired wound healing. People in low-sunlight climates or with darker skin are commonly deficient. Testing and supplementing to correct a deficiency is worthwhile. Supplementing if already replete has less clear benefit.',
+        'Vitamin C: critical for collagen synthesis — without it, skin does not heal properly (scurvy is the extreme case). Most people get enough from diet. Topical vitamin C has separate and stronger evidence for photoprotection and brightening.',
+        'Vitamin E (tocopherol): an antioxidant that protects skin cell membranes from oxidative damage. Deficiency is rare in people eating vegetable oils, nuts, and seeds. Supplementation beyond food sources has weak evidence for skin benefit.',
+        'Vitamin A (retinol): the systemic version of what retinoids do topically. Severe deficiency causes dry, rough skin. Most people are not deficient. High-dose supplementation carries toxicity risk — topical retinoids are the effective, safer route for skin improvement.',
+        'Zinc: important for wound healing, immune function, and has antimicrobial effects on acne-causing bacteria. Oral zinc (30–45mg elemental zinc daily) is shown in RCTs to reduce acne — it is less effective than antibiotics but avoids antibiotic resistance concerns.',
+      ]},
+      { type: 'callout', variant: 'warning', text: 'Fat-soluble vitamins (A, D, E, K) accumulate in the body and can reach toxic levels if over-supplemented. More is not better. If taking these, stay within recommended upper limits and ideally test your levels first (especially vitamin D).' },
+      { type: 'heading', text: 'What to skip', id: 'skip' },
+      { type: 'list', items: [
+        'Biotin (vitamin B7): widely marketed for hair and nails. Evidence is limited to people with actual biotin deficiency, which is rare. Excess biotin can also interfere with thyroid and hormone blood tests.',
+        'Collagen supplements: emerging but mixed evidence — see the Diet overview article.',
+        'Generic "skin, hair and nails" multivitamins: these typically underdose every ingredient. If you need a specific vitamin, take it specifically.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'Should I get my vitamin D tested?', a: 'If you live at a latitude above 50°N (UK, Canada, Scandinavia), have darker skin, work indoors, or cover up in the sun — yes. Deficiency is common in these groups and a simple blood test confirms it.' },
+        { q: 'Can I get enough vitamin C for skin from food alone?', a: 'Topical vitamin C and dietary vitamin C do different things. Dietary vitamin C supports collagen synthesis from the inside. Topical vitamin C provides direct photoprotection and brightening at the skin surface. For skin goals, you need both.' },
+      ]},
+    ],
+  },
+
+  // ══════════════════════════════════════════
+  // PATH: MEN'S SKINCARE
+  // ══════════════════════════════════════════
+
+  {
+    slug: 'mens-skincare-basics',
+    title: "Men's Skincare: Start Here",
+    summary: "Most men use three products or fewer. Here's how to build a routine that actually works — without overcomplicating it.",
+    level: 'beginner', topic: 'Routines',
+    pathId: 'mens-skincare', pathOrder: 1, xpReward: 35,
+    readingMinutes: 4, published: '2026-06-10',
+    related: ['build-your-first-routine', 'spf-the-one-non-negotiable', 'mens-shaving-skincare'],
+    body: [
+      { type: 'paragraph', text: "Men's skincare is simple when stripped of the marketing. The skin biology is the same — the main differences are higher sebum production on average (driven by testosterone), thicker skin, and the mechanical stress of shaving. Everything else is the same three core steps: cleanse, moisturise, protect." },
+      { type: 'heading', text: 'The core routine', id: 'routine' },
+      { type: 'list', ordered: true, items: [
+        'Cleanser — wash your face morning and night with a gentle, non-stripping cleanser. Soap dries skin and disrupts the pH. A purpose-built face wash is not luxury — it is the right tool.',
+        'Moisturiser — men tend to skip this, often because of fear of looking "shiny." A lightweight gel moisturiser adds no visible shine while maintaining a healthy barrier.',
+        'SPF 30+ — the highest-impact anti-aging and skin cancer prevention tool available. The leading cause of visible skin aging (wrinkles, texture loss, dark spots) is UV exposure, not age itself.',
+      ]},
+      { type: 'callout', variant: 'tip', title: 'Combine steps if needed', text: 'A moisturiser with SPF built in is fine for daily use. It reduces the routine to two steps. The trade-off is that SPF-infused moisturisers often have lower protection than a standalone sunscreen — but SPF 30 every day beats SPF 50 used inconsistently.' },
+      { type: 'heading', text: 'What makes men\'s skin different', id: 'differences' },
+      { type: 'list', items: [
+        'Higher sebum: testosterone stimulates larger and more active sebaceous glands. Men tend toward oily skin and are more acne-prone into adulthood than women.',
+        'Thicker skin: men\'s skin is about 20–25% thicker on average due to higher collagen density. This delays some visible signs of aging but does not protect against UV damage.',
+        'Shaving: removes surface cells (a form of exfoliation) and can disrupt the skin barrier. Post-shave products that are alcohol-free and include a humectant reduce irritation significantly.',
+      ]},
+      { type: 'faq', items: [
+        { q: 'Do I need separate products for men?', a: 'No. "For men" on a label is marketing. Ingredients are what matter, and there is no ingredient that works differently based on your gender. Do not pay a premium for blue packaging.' },
+        { q: 'My skin feels fine — do I still need to moisturise?', a: 'Feeling fine does not mean the barrier is intact. A compromised barrier shows up later as sensitivity, dryness, or early aging. Moisturising consistently is preventive, not reactive.' },
+      ]},
+      { type: 'quiz', questions: [
+        { q: 'What is the main cause of visible skin aging in men?', options: ['Natural aging', 'UV exposure', 'Dehydration', 'Shaving'], answer: 1, explanation: 'UV radiation is responsible for up to 80% of visible facial aging. Daily SPF is therefore the highest-impact anti-aging step.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'mens-shaving-skincare',
+    title: 'Shaving Without Wrecking Your Skin',
+    summary: 'Razor burn, ingrown hairs, and post-shave dryness are all avoidable. The technique and products that make a real difference.',
+    level: 'beginner', topic: 'Routines',
+    pathId: 'mens-skincare', pathOrder: 2, xpReward: 35,
+    readingMinutes: 4, published: '2026-06-12',
+    related: ['mens-skincare-basics', 'understanding-acne'],
+    prerequisiteSlug: 'mens-skincare-basics',
+    body: [
+      { type: 'paragraph', text: 'Shaving is a form of mechanical exfoliation — it removes a layer of dead skin cells along with the hair. Done correctly, this can leave skin smooth. Done carelessly, it strips the barrier, causes razor burn, traps hairs, and leads to post-inflammatory hyperpigmentation on darker skin tones.' },
+      { type: 'heading', text: 'Before you shave', id: 'before' },
+      { type: 'list', items: [
+        'Soften the hair first: shave after a shower when hair has absorbed water and softened. Dry shaving requires more force and causes more irritation.',
+        'Use a shave gel or cream, not foam: foam is mostly air and provides poor lubrication. A gel or cream creates a proper film that the blade glides over.',
+        'Do not use bar soap: it leaves a residue that increases friction and dries skin.',
+      ]},
+      { type: 'heading', text: 'During the shave', id: 'during' },
+      { type: 'list', items: [
+        'Shave with the grain: going against the direction of hair growth gets a closer shave but dramatically increases irritation and ingrown hair risk, especially on the neck.',
+        'Use light pressure — let the blade do the work. Pressing harder does not improve the shave; it increases cuts and irritation.',
+        'Rinse the blade frequently: a clogged blade drags rather than cuts.',
+        'Replace blades regularly: a dull blade requires more passes and more pressure. Most blades last 5–7 shaves, not 20.',
+      ]},
+      { type: 'heading', text: 'After the shave', id: 'after' },
+      { type: 'list', items: [
+        'Rinse with cool water: closes pores and reduces redness.',
+        'Avoid alcohol-based aftershaves: they sting for a reason — they strip the barrier and dry skin significantly. They feel "clean" because that sensation is associated with cleanliness, not because they are doing something useful.',
+        'Apply a light moisturiser or balm with niacinamide: this calms redness and replenishes moisture lost during shaving.',
+        'SPF if it is morning: freshly shaved skin is more UV-sensitive.',
+      ]},
+      { type: 'callout', variant: 'tip', title: 'Ingrown hairs (pseudofolliculitis)', text: 'Common in men with curly or coiled hair, especially on the neck. Caused by hairs curling back into the skin after cutting. Prevention: shave with the grain only, use a single-blade razor, exfoliate gently 2–3 times a week, and moisturise consistently. Salicylic acid (2%) helps clear clogged follicles.' },
+      { type: 'faq', items: [
+        { q: 'Are expensive razors worth it?', a: 'A sharp, well-maintained single or double-blade razor outperforms a dull multi-blade one. Beyond that, the return on investment drops off. The blade matters more than the handle.' },
+        { q: 'I get a lot of redness after shaving — what helps?', a: 'Apply a product with niacinamide or centella asiatica immediately after. These reduce redness and barrier disruption. If redness persists beyond 30 minutes, razor burn is ongoing — revisit your technique and blade sharpness.' },
+      ]},
+    ],
+  },
+
+  {
+    slug: 'mens-acne-guide',
+    title: "Acne in Men: Why It Happens and What Works",
+    summary: "Testosterone, stress, and shaving all conspire against clear skin. The evidence-based approach to breakouts that actually fits a simpler routine.",
+    level: 'intermediate', topic: 'Conditions',
+    pathId: 'mens-skincare', pathOrder: 3, xpReward: 45,
+    readingMinutes: 5, published: '2026-06-14',
+    related: ['understanding-acne', 'sugar-and-acne', 'mens-shaving-skincare'],
+    prerequisiteSlug: 'mens-shaving-skincare',
+    body: [
+      { type: 'paragraph', text: 'Acne in men is driven by the same factors as acne generally — excess sebum, clogged follicles, bacteria, inflammation — but the hormonal environment is different. Testosterone directly stimulates sebaceous glands, which is why men tend to have oilier skin and often worse or later-onset acne than women.' },
+      { type: 'heading', text: 'Why men get acne', id: 'why' },
+      { type: 'list', items: [
+        'High androgen levels: testosterone converts to DHT (dihydrotestosterone) in sebaceous glands, directly stimulating oil production. This is why acne spikes in male puberty and why anti-androgens are used in female acne treatment but not typically in men.',
+        'Sweat and occlusion: exercise, helmets, and close-fitting clothing trap heat and moisture against skin — a breeding ground for acne-causing bacteria.',
+        'Shaving irritation: disrupting the follicle opening during shaving can trigger inflammatory acne, particularly on the neck and jaw.',
+        'Diet: men tend to consume more high-GI foods and dairy on average than women in most dietary surveys — both linked to acne.',
+      ]},
+      { type: 'heading', text: 'What actually works', id: 'treatment' },
+      { type: 'list', items: [
+        'Benzoyl peroxide (2.5–5%): kills Cutibacterium acnes bacteria and unclogs pores. The most effective OTC acne treatment. Start at 2.5% — the lower concentration is as effective as 10% with far less dryness.',
+        'Salicylic acid (2%): oil-soluble, penetrates pores, dissolves the debris that causes blackheads and whiteheads. Good for blackhead-prone areas like the nose and forehead.',
+        'Niacinamide (5%): reduces sebum production and calms redness. Well tolerated, no adjustment period needed.',
+        'Retinoids: prescription tretinoin is the most effective topical treatment for acne overall. Worth requesting from a GP if OTC options plateau.',
+        'Oral options: a GP can prescribe antibiotics (short-term), or refer for isotretinoin if acne is severe. Oral zinc (30mg elemental) has evidence for mild-to-moderate acne as a non-antibiotic option.',
+      ]},
+      { type: 'callout', variant: 'note', text: 'Gym supplements — particularly whey protein and creatine — are associated with acne in some studies and anecdotal reports. If breakouts coincided with starting supplementation, trial removal of whey (switch to pea or rice protein) and observe over 8 weeks.' },
+      { type: 'faq', items: [
+        { q: 'Does masturbation or sex affect acne?', a: 'No. This is a persistent myth with no scientific basis. Acne is not influenced by sexual activity.' },
+        { q: 'I have tried everything — what next?', a: 'If OTC treatments have not worked after 12 weeks of consistent use, see a GP or dermatologist. Prescription tretinoin and oral options are significantly more effective and should not be a last resort.' },
+      ]},
+    ],
+  },
 ]
 
 export function getArticle(slug: string): Article | undefined {

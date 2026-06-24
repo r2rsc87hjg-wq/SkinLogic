@@ -4,8 +4,7 @@ import { getLearnGuideLimiter, getIp , safeLimit } from '@/lib/rate-limit'
 import { validateLearnGuideInput } from '@/lib/validators'
 import { ARTICLES } from '@/content/learn/articles'
 
-// Pip uses web_search which can take 10–20s — extend beyond Vercel's 10s default.
-export const maxDuration = 60
+export const maxDuration = 30
 
 // Guided Learning ("Learn with Pip") — Claude answers a skincare question with
 // a short, friendly lesson, finds a reputable article on the web, and proposes
@@ -24,16 +23,14 @@ const SYSTEM_PROMPT = `You are Pip, a warm, upbeat skin-health learning guide (a
 
 Your job each turn:
 1. Answer the user's question with a SHORT, friendly mini-lesson — plain English, encouraging, lightly playful, never preachy. 2 short paragraphs max. You are educational, NOT a doctor: never diagnose, and recommend seeing a board-certified dermatologist for anything that needs medical attention.
-2. Use the web_search tool to find 2–4 genuinely reputable, current articles relevant to the question (prefer the American Academy of Dermatology, PubMed/peer-reviewed sources, university/health-system sites, and respected science writers). AVOID shops, brand marketing, and influencer blogs. Use the REAL titles and URLs returned by search — never invent a URL.
-3. Suggest 3 fun, guided follow-up questions that nudge the user to keep exploring (short, written in the user's voice, e.g. "Why does stress cause breakouts?").
-4. From this internal catalogue, pick up to 2 slugs most relevant to the topic (or none if nothing fits):
+2. Suggest 3 fun, guided follow-up questions that nudge the user to keep exploring (short, written in the user's voice, e.g. "Why does stress cause breakouts?").
+3. From this internal catalogue, pick up to 2 slugs most relevant to the topic (or none if nothing fits):
 ${INTERNAL_CATALOG}
 
 Respond with ONLY a single JSON object, no prose before or after, in exactly this shape:
 {
   "lesson": "string — the friendly mini-lesson",
   "followups": ["string", "string", "string"],
-  "articles": [{"title": "string", "url": "string", "source": "string — e.g. AAD"}],
   "internal": ["slug", "slug"]
 }
 Keep it valid JSON. Do not wrap it in markdown fences.`
@@ -89,44 +86,14 @@ export async function POST(request: NextRequest) {
     validation.history.map((t) => ({ role: t.role, content: t.content }))
   messages.push({ role: 'user', content: validation.question })
 
-  // 4. Call Claude with a single web search allowed (keeps costs low).
-  // allowed_callers: ['direct'] is required so Haiku (which doesn't support
-  // programmatic tool calling) can invoke the server-side web_search tool.
-  const tools = [
-    {
-      type: 'web_search_20260209',
-      name: 'web_search',
-      max_uses: 1,
-      allowed_callers: ['direct'],
-    },
-  ]
-
   try {
-    let response = await anthropic.messages.create({
+    const response = await anthropic.messages.create({
       model: PIP_MODEL,
       max_tokens: LEARN_MAX_TOKENS,
       system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
-      tools: tools as never,
       messages: messages as never,
     })
 
-    // Allow up to 3 calls total — web search with history sometimes needs two
-    // pause_turn continuations before producing final JSON. System prompt is
-    // cached so calls 2 and 3 only pay for incremental context tokens.
-    let guard = 0
-    while ((response.stop_reason as string) === 'pause_turn' && guard < 2) {
-      messages.push({ role: 'assistant', content: response.content })
-      response = await anthropic.messages.create({
-        model: PIP_MODEL,
-        max_tokens: LEARN_MAX_TOKENS,
-        system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }] as never,
-        tools: tools as never,
-        messages: messages as never,
-      })
-      guard++
-    }
-
-    // Concatenate the assistant's text blocks and parse the JSON payload.
     const text = response.content
       .filter((b): b is { type: 'text'; text: string } => b.type === 'text')
       .map((b) => b.text)
@@ -136,7 +103,6 @@ export async function POST(request: NextRequest) {
       | {
           lesson?: string
           followups?: unknown
-          articles?: unknown
           internal?: unknown
         }
       | null
@@ -151,29 +117,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Normalise + clamp the shapes before returning to the client.
     const followups = Array.isArray(parsed.followups)
       ? parsed.followups.filter((f) => typeof f === 'string').slice(0, 3)
       : []
 
-    const articles = Array.isArray(parsed.articles)
-      ? parsed.articles
-          .filter(
-            (a): a is { title: string; url: string; source?: string } =>
-              typeof a === 'object' &&
-              a !== null &&
-              typeof (a as { url?: unknown }).url === 'string' &&
-              /^https?:\/\//.test((a as { url: string }).url)
-          )
-          .map((a) => ({
-            title: String(a.title ?? a.url),
-            url: a.url,
-            source: typeof a.source === 'string' ? a.source : '',
-          }))
-          .slice(0, 4)
-      : []
-
-    // Map internal slugs back to real hub articles (drops anything unknown).
     const internalSlugs = Array.isArray(parsed.internal)
       ? (parsed.internal.filter((s) => typeof s === 'string') as string[])
       : []
@@ -183,16 +130,10 @@ export async function POST(request: NextRequest) {
       .slice(0, 2)
       .map((a) => ({ slug: a.slug, title: a.title, summary: a.summary }))
 
-    // Web-search responses wrap cited spans in <cite …>…</cite> tags — strip the
-    // tags (keep the text) so the lesson reads cleanly in the UI.
-    const lesson = parsed.lesson
-      .replace(/<\/?cite[^>]*>/g, '')
-      .trim()
-
     return NextResponse.json({
-      lesson,
+      lesson: parsed.lesson.trim(),
       followups,
-      articles,
+      articles: [],
       internal,
     })
   } catch (err) {

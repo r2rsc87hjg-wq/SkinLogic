@@ -85,6 +85,7 @@ export default function IndustryPage() {
               people whether they <em>felt</em> their skin looked better. All of these
               can become "clinically proven" in marketing copy.
             </p>
+            <EvidenceSpectrum />
             <Callout variant="what-to-look-for">
               <strong>What actually carries weight:</strong> Independent peer-reviewed
               trials published in journals like the Journal of the American Academy
@@ -106,6 +107,7 @@ export default function IndustryPage() {
         {/* ── 2. EU vs US ──────────────────────────────────────────────── */}
         <section id="eu-us-gap" className="mb-16 scroll-mt-24">
           <SectionHeading number="02" title="The EU has banned ~1,400 cosmetic ingredients. The US has restricted 11." />
+          <RegulationGap />
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
               This statistic is widely cited and broadly accurate. The EU Cosmetics
@@ -210,6 +212,7 @@ export default function IndustryPage() {
               quality, and your calibration of a recommendation should account for
               that.
             </p>
+            <InfluencerFlow />
             <Callout variant="important">
               <strong>The testimonial problem:</strong> Personal skincare testimonials
               — "this changed my skin" — are not evidence of efficacy. Skin changes
@@ -350,6 +353,7 @@ export default function IndustryPage() {
               active — but the relevant question is the formulation approach and
               stability testing, not the price point.
             </p>
+            <PriceVsIngredient />
             <Callout variant="what-to-look-for">
               <strong>How to evaluate:</strong> Check the active ingredient, its
               concentration, and its position in the ingredient list (ingredients
@@ -394,6 +398,141 @@ export default function IndustryPage() {
         </div>
       </article>
     </main>
+  )
+}
+
+// ── Infographic: Evidence quality spectrum ────────────────────────────────────
+function EvidenceSpectrum() {
+  const levels = [
+    { label: 'Consumer perception survey', sub: 'e.g. "felt smoother"', weight: 'Weakest', color: '#e5e0d8' },
+    { label: 'Unpublished internal test', sub: 'brand-run, not peer-reviewed', weight: 'Weak', color: '#d4c9ba' },
+    { label: 'Industry-funded study', sub: 'may be peer-reviewed but check conflicts', weight: 'Moderate', color: '#a8c9b0' },
+    { label: 'Independent RCT, published', sub: '50+ participants, control group, blinded', weight: 'Strong', color: '#46c08a' },
+  ]
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">Evidence quality — what "clinically proven" might mean</p>
+      </div>
+      <div className="divide-y divide-line/40">
+        {levels.map((l, i) => (
+          <div key={i} className="flex items-center gap-4 px-4 py-3">
+            <div className="w-3 h-3 rounded-full shrink-0" style={{ background: l.color }} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-ink leading-tight">{l.label}</p>
+              <p className="text-xs text-muted mt-0.5">{l.sub}</p>
+            </div>
+            <span className="text-xs font-semibold shrink-0" style={{ color: l.color === '#46c08a' ? '#46c08a' : '#9e9688' }}>
+              {l.weight}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
+        <p className="text-[0.65rem] text-muted">All four can legally appear on packaging as "clinically proven"</p>
+      </div>
+    </figure>
+  )
+}
+
+// ── Infographic: EU vs US banned ingredients ──────────────────────────────────
+function RegulationGap() {
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">Restricted/prohibited cosmetic ingredients</p>
+      </div>
+      <div className="grid grid-cols-2 divide-x divide-line/40">
+        <div className="p-5 text-center">
+          <div className="font-display text-5xl font-bold text-accent leading-none mb-1">~1,400</div>
+          <div className="text-sm font-semibold text-ink">EU banned/restricted</div>
+          <div className="text-xs text-muted mt-1 leading-snug">Annex II, EC No 1223/2009<br />Precautionary principle</div>
+        </div>
+        <div className="p-5 text-center">
+          <div className="font-display text-5xl font-bold text-muted leading-none mb-1">11</div>
+          <div className="text-sm font-semibold text-ink">US restricted categories</div>
+          <div className="text-xs text-muted mt-1 leading-snug">FDA OTC monograph<br />Risk-based approach</div>
+        </div>
+      </div>
+      <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
+        <p className="text-[0.65rem] text-muted">A larger EU list does not automatically mean EU products are safer — many EU bans are precautionary, not evidence-based</p>
+      </div>
+    </figure>
+  )
+}
+
+// ── Infographic: Influencer money flow ────────────────────────────────────────
+function InfluencerFlow() {
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">How influencer skincare economics work</p>
+      </div>
+      <div className="p-4">
+        <div className="grid grid-cols-3 gap-2 text-center text-xs mb-3">
+          {[
+            { label: 'Brand', sub: 'pays flat fee\nor % commission', icon: '🏢' },
+            { label: 'Creator', sub: 'produces content\n+ affiliate code', icon: '📱' },
+            { label: 'Consumer', sub: 'buys via link\nor promo code', icon: '🛒' },
+          ].map((node, i) => (
+            <div key={i} className="rounded-xl bg-sand/60 border border-line/50 p-3">
+              <div className="text-xl mb-1">{node.icon}</div>
+              <div className="font-semibold text-ink">{node.label}</div>
+              <div className="text-muted mt-0.5 leading-tight whitespace-pre-line">{node.sub}</div>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          {[
+            { type: 'Paid partnership', req: 'Must disclose (FTC)', ok: true },
+            { type: 'Affiliate code', req: 'Must disclose (FTC)', ok: true },
+            { type: 'Gifting (no payment)', req: 'Disclosure required if endorsing', ok: null },
+            { type: 'Product packaging endorsement', req: 'No disclosure required', ok: false },
+          ].map((row, i) => (
+            <div key={i} className="rounded-lg border border-line/40 px-3 py-2">
+              <div className="font-medium text-ink">{row.type}</div>
+              <div className={`mt-0.5 ${row.ok === true ? 'text-accent' : row.ok === false ? 'text-amber-600' : 'text-muted'}`}>
+                {row.req}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </figure>
+  )
+}
+
+// ── Infographic: Price vs active ingredient reality ───────────────────────────
+function PriceVsIngredient() {
+  const products = [
+    { name: 'The Ordinary Niacinamide', price: '~£5', pct: '10%', brand: 'budget', verdict: 'Evidence-based dose' },
+    { name: 'CeraVe PM Moisturiser', price: '~£14', pct: '~4%', brand: 'mid', verdict: 'Solid formulation' },
+    { name: 'Tatcha The Dewy Skin Cream', price: '~£85', pct: 'unlisted', brand: 'luxury', verdict: 'Concentration not disclosed' },
+  ]
+  return (
+    <figure className="rounded-2xl border border-line/60 overflow-hidden my-5">
+      <div className="bg-sand/40 px-4 py-2.5 border-b border-line/40">
+        <p className="eyebrow text-muted text-[0.6rem]">Niacinamide — same active, very different prices</p>
+      </div>
+      <div className="divide-y divide-line/40">
+        {products.map((p, i) => (
+          <div key={i} className="flex items-center gap-3 px-4 py-3">
+            <div className={`text-xs font-bold tabular-nums px-2 py-0.5 rounded shrink-0 ${
+              p.brand === 'budget' ? 'bg-accent/15 text-accent' :
+              p.brand === 'mid' ? 'bg-sand text-muted' :
+              'bg-amber-50 text-amber-700'
+            }`}>{p.price}</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-ink truncate">{p.name}</p>
+              <p className="text-xs text-muted">Niacinamide {p.pct} · {p.verdict}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-sand/20 px-4 py-2 border-t border-line/40">
+        <p className="text-[0.65rem] text-muted">Check active concentration and ingredient list position — not the price tag</p>
+      </div>
+    </figure>
   )
 }
 

@@ -1,6 +1,6 @@
-// Side-by-side comparison of SPF (UVB) and PA+ (UVA) rating systems.
-// PA+ is the Japanese/Asian standard and is increasingly appearing on
-// internationally formulated products sold in the US.
+'use client'
+
+import { CollapsibleBlock } from './CollapsibleBlock'
 
 const SPF_ROWS = [
   { rating: 'SPF 15', uvbBlocked: '93%', note: 'Minimum for daily use (AAD)' },
@@ -19,68 +19,59 @@ const PA_ROWS = [
 
 export function RatingSystemTable() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* SPF */}
-      <div className="glass relative overflow-hidden rounded-2xl p-5">
-        <h3 className="font-semibold text-ink mb-1">SPF — UVB protection</h3>
-        <p className="text-sm text-muted mb-3">
-          Sun Protection Factor. Measures how much UVB radiation is blocked.
-          The scale is not linear — the jump from SPF 30 to SPF 50 is smaller
-          than it looks.
-        </p>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <CollapsibleBlock
+        title="SPF — UVB protection"
+        subtitle="Sun Protection Factor. Measures how much UVB radiation is blocked. The scale is not linear — the jump from SPF 30 to SPF 50 is smaller than it looks."
+        defaultOpen
+      >
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-line text-left eyebrow text-muted">
-              <th className="py-2 pr-4">Rating</th>
-              <th className="py-2 pr-4">UVB blocked</th>
-              <th className="py-2">Context</th>
+              <th className="px-4 py-2.5">Rating</th>
+              <th className="px-4 py-2.5">UVB blocked</th>
+              <th className="px-4 py-2.5">Context</th>
             </tr>
           </thead>
           <tbody>
             {SPF_ROWS.map((r) => (
               <tr key={r.rating} className="border-b border-line/60">
-                <td className="py-2 pr-4 font-medium text-ink">{r.rating}</td>
-                <td className="py-2 pr-4 text-ink/80">{r.uvbBlocked}</td>
-                <td className="py-2 text-muted text-xs">{r.note}</td>
+                <td className="px-4 py-2.5 font-medium text-ink whitespace-nowrap">{r.rating}</td>
+                <td className="px-4 py-2.5 text-ink/80">{r.uvbBlocked}</td>
+                <td className="px-4 py-2.5 text-muted text-xs">{r.note}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </CollapsibleBlock>
 
-      {/* PA+ */}
-      <div className="glass relative overflow-hidden rounded-2xl p-5">
-        <h3 className="font-semibold text-ink mb-1">PA+ — UVA protection</h3>
-        <p className="text-sm text-muted mb-3">
-          Persistent Pigment Darkening (PPD) based. Used in Japan, Korea, and
-          increasingly on international products. The US has no equivalent
-          standardised UVA rating system — "broad spectrum" on a US label only
-          means the product passed a basic UVA/UVB ratio test, not a UVA
-          strength test.
-        </p>
+      <CollapsibleBlock
+        title="PA+ — UVA protection"
+        subtitle='Persistent Pigment Darkening (PPD) based. Used in Japan, Korea, and internationally. The US has no equivalent — "broad spectrum" is a pass/fail threshold, not a strength rating.'
+        defaultOpen
+      >
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-line text-left eyebrow text-muted">
-              <th className="py-2 pr-4">Rating</th>
-              <th className="py-2 pr-4">PPD value</th>
-              <th className="py-2">What it means</th>
+              <th className="px-4 py-2.5">Rating</th>
+              <th className="px-4 py-2.5">PPD value</th>
+              <th className="px-4 py-2.5">What it means</th>
             </tr>
           </thead>
           <tbody>
             {PA_ROWS.map((r) => (
               <tr key={r.rating} className="border-b border-line/60">
-                <td className="py-2 pr-4 font-medium text-ink">{r.rating}</td>
-                <td className="py-2 pr-4 text-ink/80">{r.ppd}</td>
-                <td className="py-2 text-muted text-xs">{r.protection}</td>
+                <td className="px-4 py-2.5 font-medium text-ink whitespace-nowrap">{r.rating}</td>
+                <td className="px-4 py-2.5 text-ink/80 whitespace-nowrap">{r.ppd}</td>
+                <td className="px-4 py-2.5 text-muted text-xs">{r.protection}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="text-xs text-muted mt-3">
-          Source: Japanese Cosmetic Industry Association (JCIA) PA+ system.
-          PPD = Persistent Pigment Darkening factor.
+        <p className="text-xs text-muted px-4 py-3 border-t border-line/40">
+          Source: Japanese Cosmetic Industry Association (JCIA). PPD = Persistent Pigment Darkening factor.
         </p>
-      </div>
+      </CollapsibleBlock>
     </div>
   )
 }

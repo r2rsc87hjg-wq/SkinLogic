@@ -117,6 +117,36 @@ export const PATHS: Path[] = [
       'mature-skin-guide',
     ],
   },
+  {
+    id: 'diet-and-skin',
+    title: 'Diet & Skin',
+    emoji: '🥗',
+    description: 'What you eat shows up on your face — but the science is more nuanced than headlines suggest. Explore sugar, gut health, omega-3s, and vitamins with evidence behind them.',
+    accentColor: '#84cc16',
+    bgClass: 'bg-lime-50',
+    level: 'intermediate',
+    lessonSlugs: [
+      'diet-and-skin-overview',
+      'sugar-and-acne',
+      'gut-skin-axis',
+      'omega-3-and-skin',
+      'vitamins-for-skin',
+    ],
+  },
+  {
+    id: 'mens-skincare',
+    title: "Men's Skincare",
+    emoji: '🪒',
+    description: "No-nonsense skincare for men — the biology, the routine, the shaving fixes, and the acne solutions. Stripped of the marketing.",
+    accentColor: '#64748b',
+    bgClass: 'bg-slate-50',
+    level: 'beginner',
+    lessonSlugs: [
+      'mens-skincare-basics',
+      'mens-shaving-skincare',
+      'mens-acne-guide',
+    ],
+  },
 ]
 
 export function getPath(id: string): Path | undefined {

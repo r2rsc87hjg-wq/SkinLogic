@@ -21,6 +21,7 @@ interface IngredientListItem {
   slug: string
   summary: string
   studyTypes?: string[]
+  category?: string
 }
 
 export default async function IngredientsPage() {

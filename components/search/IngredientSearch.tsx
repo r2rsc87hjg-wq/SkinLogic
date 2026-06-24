@@ -9,28 +9,73 @@ interface IngredientListItem {
   slug: string
   summary: string
   studyTypes?: string[]
+  category?: string
 }
 
 interface IngredientSearchProps {
   ingredients: IngredientListItem[]
 }
 
+const CATEGORY_FILTERS = [
+  { id: 'all',         label: 'All',          icon: '◈' },
+  { id: 'anti-aging',  label: 'Anti-aging',   icon: '↺' },
+  { id: 'brightening', label: 'Brightening',  icon: '✦' },
+  { id: 'exfoliant',   label: 'Exfoliants',   icon: '◦' },
+  { id: 'humectant',   label: 'Humectants',   icon: '≋' },
+  { id: 'barrier',     label: 'Barrier',      icon: '⬡' },
+  { id: 'acne',        label: 'Acne',         icon: '⊕' },
+  { id: 'antioxidant', label: 'Antioxidants', icon: '❋' },
+  { id: 'soothing',    label: 'Soothing',     icon: '∿' },
+]
+
 export function IngredientSearch({ ingredients }: IngredientSearchProps) {
   const [query, setQuery] = useState('')
+  const [activeCategory, setActiveCategory] = useState('all')
+
+  // Only show categories that have at least one ingredient
+  const availableCategories = useMemo(() => {
+    const catSet = new Set(ingredients.map((i) => i.category).filter(Boolean))
+    return CATEGORY_FILTERS.filter(
+      (c) => c.id === 'all' || catSet.has(c.id)
+    )
+  }, [ingredients])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return ingredients
-    return ingredients.filter(
-      (i) =>
+    return ingredients.filter((i) => {
+      const matchesQuery =
+        !q ||
         i.name.toLowerCase().includes(q) ||
         i.summary.toLowerCase().includes(q)
-    )
-  }, [query, ingredients])
+      const matchesCategory =
+        activeCategory === 'all' || i.category === activeCategory
+      return matchesQuery && matchesCategory
+    })
+  }, [query, activeCategory, ingredients])
 
   return (
     <div>
-      <div className="mb-8">
+      {/* Category filter chips */}
+      <div className="mb-5 flex flex-wrap gap-2">
+        {availableCategories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            className={[
+              'rounded-full px-4 py-1.5 text-sm font-medium transition-all inline-flex items-center gap-1.5',
+              activeCategory === cat.id
+                ? 'bg-accent text-white shadow-sm'
+                : 'glass-quiet text-ink/70 hover:text-ink',
+            ].join(' ')}
+          >
+            <span className="text-[0.7rem] leading-none" aria-hidden>{cat.icon}</span>
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Search input */}
+      <div className="mb-6">
         <label htmlFor="ingredient-search" className="sr-only">
           Search ingredients
         </label>
@@ -46,11 +91,11 @@ export function IngredientSearch({ ingredients }: IngredientSearchProps) {
             spellCheck={false}
           />
         </div>
-        {query && (
+        {(query || activeCategory !== 'all') && (
           <p className="mt-2 text-sm text-muted">
             {filtered.length === 0
-              ? 'No ingredients matched that search.'
-              : `${filtered.length} ingredient${filtered.length === 1 ? '' : 's'} found`}
+              ? 'No ingredients matched.'
+              : `${filtered.length} ingredient${filtered.length === 1 ? '' : 's'}`}
           </p>
         )}
       </div>
@@ -64,10 +109,21 @@ export function IngredientSearch({ ingredients }: IngredientSearchProps) {
               slug={ingredient.slug}
               summary={ingredient.summary}
               studyTypes={ingredient.studyTypes}
+              category={ingredient.category}
             />
           ))}
         </div>
-      ) : null}
+      ) : (
+        <div className="glass rounded-2xl py-12 text-center text-muted">
+          <p>No ingredients matched that filter.</p>
+          <button
+            onClick={() => { setQuery(''); setActiveCategory('all') }}
+            className="mt-3 text-sm text-accent hover:underline"
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
     </div>
   )
 }

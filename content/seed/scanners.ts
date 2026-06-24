@@ -13,6 +13,8 @@ export interface SeedScanner {
   _id: string
   name: string
   slug: string
+  domain?: string
+  url?: string
   technology: string
   verdictRating: VerdictRating
   verdict: string
@@ -25,6 +27,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-inci-beauty',
     name: 'INCI Beauty',
     slug: 'inci-beauty',
+    domain: 'incibeauty.com',
+    url: 'https://incibeauty.com',
     technology: 'EU CosIng ingredient decoder — identification, regulatory status, origin',
     verdictRating: 'worth-it',
     verdict:
@@ -43,6 +47,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-think-dirty',
     name: 'Think Dirty',
     slug: 'think-dirty',
+    domain: 'thinkdirtyapp.com',
+    url: 'https://www.thinkdirtyapp.com',
     technology: 'Ingredient safety scanner — proprietary 0–10 "dirty" hazard score',
     verdictRating: 'limited',
     verdict:
@@ -60,6 +66,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-ewg-skin-deep',
     name: 'EWG Skin Deep',
     slug: 'ewg-skin-deep',
+    domain: 'ewg.org',
+    url: 'https://www.ewg.org/skindeep/',
     technology: 'Online ingredient hazard database — 1–10 hazard score across 70,000+ products',
     verdictRating: 'limited',
     verdict:
@@ -77,6 +85,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-cosdna',
     name: 'CosDNA',
     slug: 'cosdna',
+    domain: 'cosdna.com',
+    url: 'https://cosdna.com',
     technology: 'Online ingredient analysis — comedogenicity and irritation scoring',
     verdictRating: 'limited',
     verdict:
@@ -94,6 +104,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-skinvision',
     name: 'SkinVision',
     slug: 'skinvision',
+    domain: 'skinvision.com',
+    url: 'https://www.skinvision.com',
     technology: 'AI skin lesion assessment — smartphone image analysis with risk classification',
     verdictRating: 'depends',
     verdict:
@@ -112,6 +124,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-miiskin',
     name: 'Miiskin',
     slug: 'miiskin',
+    domain: 'miiskin.com',
+    url: 'https://miiskin.com',
     technology: 'Mole documentation and size-tracking — structured photo archive with comparison',
     verdictRating: 'worth-it',
     verdict:
@@ -130,6 +144,8 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-curology',
     name: 'Curology',
     slug: 'curology',
+    domain: 'curology.com',
+    url: 'https://curology.com',
     technology: 'Telehealth prescription skincare — custom compounded Rx formulas from licensed practitioners',
     verdictRating: 'worth-it',
     verdict:
@@ -149,6 +165,7 @@ export const SEED_SCANNERS: SeedScanner[] = [
     _id: 'seed-neutrogena-skin360',
     name: 'Neutrogena Skin360',
     slug: 'neutrogena-skin360',
+    domain: 'neutrogena.com',
     technology: 'Discontinued face scanner — 30× magnifying iPhone attachment with AI pore analysis',
     verdictRating: 'not-recommended',
     verdict:
