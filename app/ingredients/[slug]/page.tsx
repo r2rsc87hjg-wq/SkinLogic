@@ -9,6 +9,7 @@ import {
 import { PortableText } from '@/components/portable-text'
 import { CitationList } from '@/components/citation'
 import { StudyTypeLegend } from '@/components/study-type-badge'
+import { SkinDiagram } from '@/components/ingredients/SkinDiagram'
 import type { Ingredient } from '@/types'
 import { SEED_INGREDIENTS } from '@/content/seed/ingredients'
 
@@ -75,6 +76,7 @@ export default async function IngredientPage({ params }: Props) {
             {seed.summary}
           </p>
         </header>
+        <SkinDiagram slug={seed.slug} />
         <p className="text-sm text-gray-400 mt-10">
           Full cited breakdown coming soon. In the meantime the summary above reflects the current research.
         </p>
@@ -111,7 +113,9 @@ export default async function IngredientPage({ params }: Props) {
         </p>
       </header>
 
-      <div className="space-y-10 divide-y divide-gray-100">
+      <SkinDiagram slug={slug} />
+
+      <div className="space-y-10 divide-y divide-gray-100 mt-10">
 
         {/* Biological mechanism */}
         {ingredient.biologicalMechanism?.length ? (
