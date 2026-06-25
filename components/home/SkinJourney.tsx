@@ -627,7 +627,28 @@ function AllTools() {
           background: 'linear-gradient(to bottom, #04100a 0%, rgba(4,16,10,0.65) 38%, rgba(4,16,10,0.25) 68%, rgba(4,16,10,0) 100%)',
         }}
       />
-      <section className="mx-auto max-w-5xl px-4 pb-24 -mt-16">
+      <section className="mx-auto max-w-5xl px-4 pb-12 -mt-16">
+        {/* AI Analysis featured banner */}
+        <div className="glass iris rounded-3xl p-8 md:p-10 mb-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
+          <div className="flex-1 min-w-0">
+            <p className="eyebrow text-accent mb-3">AI-powered</p>
+            <h2 className="font-display text-2xl md:text-3xl font-semibold text-ink leading-tight mb-3">
+              Your skin, personalised.
+            </h2>
+            <p className="text-muted leading-relaxed max-w-md">
+              Answer a few questions — optionally add a photo — and get a science-backed analysis built around your specific skin.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <Link
+              href="/analysis"
+              className="shimmer inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-accent to-[#27705f] px-6 py-3 text-sm font-semibold text-paper shadow-soft hover:shadow-lift transition-shadow hover:-translate-y-0.5 transition-transform"
+            >
+              Try AI Skin Analysis <ArrowIcon />
+            </Link>
+          </div>
+        </div>
+
         <div className="mb-12 text-center">
           <p className="eyebrow text-accent mb-3">Everything in one place</p>
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink">All the tools</h2>

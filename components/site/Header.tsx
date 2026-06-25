@@ -6,11 +6,11 @@ import { useState, useEffect } from 'react'
 
 const NAV = [
   { href: '/learn', label: 'Learn' },
+  { href: '/profiler', label: 'Skin Profiler' },
   { href: '/ingredients', label: 'Ingredients' },
   { href: '/sunscreen', label: 'Sunscreen' },
   { href: '/app-scanner-comparison', label: 'Apps & Scanners' },
   { href: '/industry', label: 'Industry' },
-  { href: '/profiler', label: 'Skin Profiler' },
 ]
 
 export function SiteHeader() {

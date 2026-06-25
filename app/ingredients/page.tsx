@@ -7,7 +7,7 @@ import { SEED_INGREDIENTS } from '@/content/seed/ingredients'
 export const metadata: Metadata = {
   title: 'Ingredient Explainer',
   description:
-    'What the research actually says about 30 skincare actives — plain English, cited sources, zero marketing.',
+    'What the research actually says about skincare actives — plain English, cited sources, zero marketing.',
 }
 
 // Revalidate once per hour. Content editors update via Sanity Studio;
@@ -53,7 +53,7 @@ export default async function IngredientsPage() {
             Ingredient Explainer
           </h1>
           <p className="text-muted max-w-2xl leading-relaxed text-lg">
-            Plain English breakdowns of 30 skincare actives. Not what to buy —
+            Plain English breakdowns of skincare actives. Not what to buy —
             what the research actually says, what concentrations are
             evidence-based, and what brands commonly overstate. Every claim is
             cited.
