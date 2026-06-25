@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const NAV = [
   { href: '/learn', label: 'Learn' },
@@ -16,15 +16,23 @@ const NAV = [
 export function SiteHeader() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [atTop, setAtTop] = useState(true)
+
+  const isHome = pathname === '/'
+
+  useEffect(() => {
+    if (!isHome) return
+    const onScroll = () => setAtTop(window.scrollY < 10)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHome])
 
   // Highlight the section the user is currently in (incl. detail sub-routes).
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + '/')
 
-  const isHome = pathname === '/'
-
   return (
-    <header className={`sticky top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4 ${isHome ? 'bg-[#04100a]' : ''}`}>
+    <header className={`sticky top-0 z-40 px-3 pt-3 sm:px-4 sm:pt-4 transition-colors duration-300 ${isHome && atTop ? 'bg-[#04100a]' : ''}`}>
       <div className={`relative mx-auto flex max-w-5xl items-center gap-6 rounded-full px-4 sm:px-5 h-16 ${
         isHome
           ? 'border border-white/10 bg-transparent'
