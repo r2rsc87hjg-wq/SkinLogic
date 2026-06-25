@@ -34,58 +34,6 @@ export function getTokenExchangeLimiter() {
   })
 }
 
-// Tool 5: Social pipeline — 20 requests per IP per hour
-export function getSocialLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(20, '1 h'),
-    prefix: 'rl:social',
-  })
-}
-
-// Navigator AI tools — 5 requests per IP per hour each
-export function getNavigatorSpecialistLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(5, '1 h'),
-    prefix: 'rl:navigator:specialist',
-  })
-}
-
-export function getNavigatorReferralLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(5, '1 h'),
-    prefix: 'rl:navigator:referral',
-  })
-}
-
-export function getNavigatorClinicsLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(10, '1 h'),
-    prefix: 'rl:navigator:clinics',
-  })
-}
-
-// Skin Health Coach chatbot — 15 messages per IP per hour (free tier).
-export function getChatLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(15, '1 h'),
-    prefix: 'rl:chat',
-  })
-}
-
-// Subscribers get 120 chat messages per IP per hour.
-export function getSubscriberChatLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(120, '1 h'),
-    prefix: 'rl:chat:sub',
-  })
-}
-
 // Guided Learning (Learn with Pip) — 5 per IP per hour (free tier).
 export function getLearnGuideLimiter() {
   return new Ratelimit({
@@ -101,15 +49,6 @@ export function getSubscriberLearnGuideLimiter() {
     redis: getRedis(),
     limiter: Ratelimit.slidingWindow(30, '1 h'),
     prefix: 'rl:learn-guide:sub',
-  })
-}
-
-// Ingredient comparison — 10 requests per IP per hour
-export function getComparisonLimiter() {
-  return new Ratelimit({
-    redis: getRedis(),
-    limiter: Ratelimit.slidingWindow(10, '1 h'),
-    prefix: 'rl:comparison',
   })
 }
 

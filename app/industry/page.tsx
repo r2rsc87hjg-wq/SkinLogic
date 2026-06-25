@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { CollapsibleSection } from '@/components/ui/CollapsibleSection'
 import {
   EvidenceSpectrum,
@@ -216,9 +215,6 @@ export default function IndustryPage() {
           </aside>
         </div>
 
-        {/* Compare ingredients CTA */}
-        <CompareIngredientsCTA />
-
         {/* Footer */}
         <div className="border-t border-line pt-8 mt-8">
           <p className="text-xs text-muted leading-relaxed">
@@ -254,50 +250,4 @@ function KeyStats() {
   )
 }
 
-// ── Compare CTA ───────────────────────────────────────────────────────────────
-function CompareIngredientsCTA() {
-  return (
-    <div className="mt-10 mb-4">
-      <Link
-        href="/ingredients/compare"
-        className="group block glass sheen relative overflow-hidden rounded-2xl border border-accent/20 hover:border-accent/50 transition-all p-6"
-      >
-        <div className="relative z-10 flex items-start gap-5">
-          <div className="shrink-0 h-14 w-14 rounded-xl bg-accent/10 flex items-center justify-center text-2xl">
-            ⚗️
-          </div>
-          <div className="min-w-0">
-            <p className="eyebrow text-accent mb-1">Interactive tool</p>
-            <h2 className="font-display text-xl font-semibold text-ink mb-1.5 group-hover:text-accent transition-colors">
-              Compare Two Ingredients Side-by-Side
-            </h2>
-            <p className="text-sm text-muted leading-relaxed">
-              Select any two actives and see evidence quality, effective concentrations,
-              and how their mechanisms compare — evidence, not marketing.
-            </p>
-            <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-              Open comparison tool
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </Link>
-
-      <div className="flex gap-3 mt-3">
-        <Link
-          href="/ingredients"
-          className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
-        >
-          Ingredient library →
-        </Link>
-        <Link
-          href="/learn"
-          className="flex-1 text-center text-sm font-medium py-2.5 px-4 rounded-full border border-line text-ink hover:border-accent hover:text-accent transition-colors"
-        >
-          Learning hub →
-        </Link>
-      </div>
-    </div>
-  )
-}
 
