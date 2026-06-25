@@ -28,6 +28,40 @@ interface AnalysisResult {
   learn_more_topics: string[]
 }
 
+interface ReviewWorking {
+  step: string
+  why: string
+}
+
+interface ReviewChange {
+  step: string
+  issue: string
+  suggestion: string
+}
+
+interface ReviewMissing {
+  category: string
+  why: string
+}
+
+interface ReviewConflict {
+  ingredients: string[]
+  issue: string
+}
+
+interface RoutineReviewResult {
+  skin_summary: string
+  overall_verdict: string
+  whats_working: ReviewWorking[]
+  what_to_change: ReviewChange[]
+  whats_missing: ReviewMissing[]
+  ingredient_conflicts: ReviewConflict[]
+  spf_flag: boolean
+  learn_more_topics: string[]
+}
+
+type Mode = 'build' | 'review'
+
 // ── Constants ──────────────────────────────────────────────────────────────
 
 const SKIN_TYPES = ['Oily', 'Dry', 'Combination', 'Sensitive', 'Normal'] as const
@@ -59,16 +93,19 @@ const EMPTY_PROFILE: ProfileState = {
 }
 
 type Phase = 'form' | 'analyzing' | 'done'
+type ResultState = { kind: 'build'; data: AnalysisResult } | { kind: 'review'; data: RoutineReviewResult }
 
 // ── Main component ──────────────────────────────────────────────────────────
 
 export function SkinAnalysisClient() {
+  const [mode, setMode] = useState<Mode>('build')
   const [profile, setProfile] = useState<ProfileState>(EMPTY_PROFILE)
   const [file, setFile] = useState<File | null>(null)
   const [note, setNote] = useState('')
+  const [currentRoutine, setCurrentRoutine] = useState('')
   const [phase, setPhase] = useState<Phase>('form')
   const [error, setError] = useState('')
-  const [result, setResult] = useState<AnalysisResult | null>(null)
+  const [result, setResult] = useState<ResultState | null>(null)
 
   function setField(field: keyof ProfileState, value: string) {
     setProfile((prev) => ({ ...prev, [field]: value }))
@@ -80,6 +117,8 @@ export function SkinAnalysisClient() {
     !!profile.ageRange &&
     !!profile.knowledgeLevel &&
     !!profile.climate
+
+  const isFormValid = isProfileValid && (mode === 'build' || !!currentRoutine.trim())
 
   function pickFile(f: File | null) {
     setError('')
@@ -97,9 +136,14 @@ export function SkinAnalysisClient() {
     setFile(f)
   }
 
+  function switchMode(m: Mode) {
+    setMode(m)
+    setError('')
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    if (!isProfileValid) return
+    if (!isFormValid) return
 
     setPhase('analyzing')
     setError('')
@@ -112,15 +156,22 @@ export function SkinAnalysisClient() {
     body.append('ethnicity', profile.ethnicity || '')
     body.append('knowledgeLevel', profile.knowledgeLevel.toLowerCase())
     body.append('climate', profile.climate.toLowerCase())
-    if (note.trim()) body.append('note', note.trim())
-    if (file) body.append('image', file)
+
+    if (mode === 'build') {
+      if (note.trim()) body.append('note', note.trim())
+      if (file) body.append('image', file)
+    } else {
+      body.append('currentRoutine', currentRoutine.trim())
+    }
+
+    const endpoint = mode === 'build' ? '/api/analysis/submit' : '/api/analysis/routine-review'
 
     try {
-      const res = await fetch('/api/analysis/submit', { method: 'POST', body })
+      const res = await fetch(endpoint, { method: 'POST', body })
       const data = await res.json()
 
       if (res.ok && data.result) {
-        setResult(data.result)
+        setResult({ kind: mode, data: data.result })
         setPhase('done')
         return
       }
@@ -137,19 +188,50 @@ export function SkinAnalysisClient() {
     setProfile(EMPTY_PROFILE)
     setFile(null)
     setNote('')
+    setCurrentRoutine('')
     setPhase('form')
     setError('')
     setResult(null)
   }
 
   if (phase === 'done' && result) {
-    return <ResultsView result={result} profile={profile} onReset={reset} />
+    if (result.kind === 'review') {
+      return <RoutineReviewResultsView result={result.data} profile={profile} onReset={reset} />
+    }
+    return <ResultsView result={result.data} profile={profile} onReset={reset} />
   }
 
   const busy = phase === 'analyzing'
 
   return (
     <form onSubmit={submit} noValidate className="space-y-7">
+      {/* Mode toggle */}
+      <div className="flex rounded-xl border border-gray-200 p-1 gap-1">
+        <button
+          type="button"
+          onClick={() => switchMode('build')}
+          disabled={busy}
+          className={`flex-1 text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
+            mode === 'build'
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-500 hover:text-gray-800'
+          }`}
+        >
+          Build a routine
+        </button>
+        <button
+          type="button"
+          onClick={() => switchMode('review')}
+          disabled={busy}
+          className={`flex-1 text-sm font-medium py-2 px-3 rounded-lg transition-colors ${
+            mode === 'review'
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-500 hover:text-gray-800'
+          }`}
+        >
+          Review my routine
+        </button>
+      </div>
       <RadioGroup
         label="Skin type"
         name="skinType"
@@ -240,45 +322,69 @@ export function SkinAnalysisClient() {
         disabled={busy}
       />
 
-      {/* Photo section */}
-      <div className="border-t border-gray-100 pt-6 space-y-3">
-        <div>
-          <p className="text-sm font-medium text-gray-800 mb-1">
-            Photo{' '}
-            <span className="text-gray-400 font-normal">(optional · JPG, PNG, or WEBP · max 5 MB)</span>
+      {/* Current routine input — review mode only */}
+      {mode === 'review' && (
+        <div className="border-t border-gray-100 pt-6 space-y-2">
+          <label className="block text-sm font-medium text-gray-800">
+            Your current routine <span className="text-gray-400 font-normal">*</span>
+          </label>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Describe what you currently use, step by step — morning and/or evening. Include product types,
+            key ingredients if you know them, and roughly in what order you apply them. You don&apos;t need to name specific brands.
           </p>
-          <p className="text-xs text-gray-500 mb-3">
-            Adding a photo lets the AI combine what it sees with your profile above —
-            connecting visible characteristics to the research for your specific biology.
-            Without a photo, you still get a full research-backed analysis.
-          </p>
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
+          <textarea
+            value={currentRoutine}
             disabled={busy}
-            onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
-            className="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-900 hover:file:border-gray-500 disabled:opacity-50"
+            onChange={(e) => setCurrentRoutine(e.target.value.slice(0, 2000))}
+            rows={6}
+            placeholder={`e.g.\nMorning: gentle cleanser, vitamin C serum, moisturiser, SPF 50\nEvening: oil cleanser, foaming cleanser, retinol, heavy moisturiser`}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:opacity-50 leading-relaxed"
           />
-          {file && <p className="text-xs text-gray-400 mt-1">Selected: {file.name}</p>}
+          <p className="text-xs text-gray-400 text-right">{currentRoutine.length}/2000</p>
         </div>
+      )}
 
-        {file && (
+      {/* Photo section — build mode only */}
+      {mode === 'build' && (
+        <div className="border-t border-gray-100 pt-6 space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-1">
-              Anything specific to focus on in the photo?{' '}
-              <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <textarea
-              value={note}
+            <p className="text-sm font-medium text-gray-800 mb-1">
+              Photo{' '}
+              <span className="text-gray-400 font-normal">(optional · JPG, PNG, or WEBP · max 5 MB)</span>
+            </p>
+            <p className="text-xs text-gray-500 mb-3">
+              Adding a photo lets the AI combine what it sees with your profile above —
+              connecting visible characteristics to the research for your specific biology.
+              Without a photo, you still get a full research-backed analysis.
+            </p>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
               disabled={busy}
-              onChange={(e) => setNote(e.target.value.slice(0, 500))}
-              rows={2}
-              placeholder="e.g. I'm mostly curious about the texture on my cheeks"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:opacity-50"
+              onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+              className="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-900 hover:file:border-gray-500 disabled:opacity-50"
             />
+            {file && <p className="text-xs text-gray-400 mt-1">Selected: {file.name}</p>}
           </div>
-        )}
-      </div>
+
+          {file && (
+            <div>
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Anything specific to focus on in the photo?{' '}
+                <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <textarea
+                value={note}
+                disabled={busy}
+                onChange={(e) => setNote(e.target.value.slice(0, 500))}
+                rows={2}
+                placeholder="e.g. I'm mostly curious about the texture on my cheeks"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:opacity-50"
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       {error && (
         <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">
@@ -288,10 +394,13 @@ export function SkinAnalysisClient() {
 
       <button
         type="submit"
-        disabled={!isProfileValid || busy}
+        disabled={!isFormValid || busy}
         className="w-full bg-accent text-paper text-sm font-medium py-3 px-4 rounded-full hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
-        {busy ? 'Analysing…' : 'Analyse my skin'}
+        {busy
+          ? mode === 'review' ? 'Reviewing…' : 'Analysing…'
+          : mode === 'review' ? 'Review my routine' : 'Analyse my skin'
+        }
       </button>
 
       <p className="text-xs text-gray-400 leading-relaxed text-center">
@@ -450,6 +559,172 @@ function ResultsView({ result, profile, onReset }: ResultsViewProps) {
         This routine is educational guidance based on published research, not medical advice.
         For persistent concerns, see a board-certified dermatologist.
       </p>
+    </div>
+  )
+}
+
+// ── Routine review results ──────────────────────────────────────────────────
+
+interface RoutineReviewResultsViewProps {
+  result: RoutineReviewResult
+  profile: ProfileState
+  onReset: () => void
+}
+
+function RoutineReviewResultsView({ result, profile, onReset }: RoutineReviewResultsViewProps) {
+  const profileTags = [
+    profile.skinType,
+    profile.primaryConcern,
+    profile.ageRange,
+    profile.climate,
+    profile.gender || null,
+  ].filter(Boolean) as string[]
+
+  return (
+    <div className="space-y-6">
+      <p className="text-xs text-center text-muted">
+        Nothing is stored — your review exists only in this browser session.
+      </p>
+
+      {/* Skin summary + verdict */}
+      <div className="rounded-2xl border border-line bg-sand/40 p-6 space-y-4">
+        <p className="eyebrow text-accent">Routine review</p>
+        <p className="text-ink leading-relaxed">{result.skin_summary}</p>
+        <p className="text-sm text-gray-700 leading-relaxed border-t border-line pt-4">{result.overall_verdict}</p>
+        <div className="flex flex-wrap gap-2">
+          {profileTags.map((tag) => (
+            <span key={tag} className="text-xs bg-white border border-line rounded-full px-3 py-1 text-muted">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* SPF warning */}
+      {result.spf_flag && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+          <p className="text-sm font-semibold text-amber-900 mb-1">SPF is non-negotiable for your concern.</p>
+          <p className="text-sm text-amber-800">Skipping it will work against everything else in this routine.</p>
+        </div>
+      )}
+
+      {/* What's working */}
+      {result.whats_working.length > 0 && (
+        <ReviewSection
+          title="What's working"
+          color="emerald"
+          icon="✓"
+          items={result.whats_working.map((w) => ({ heading: w.step, body: w.why }))}
+        />
+      )}
+
+      {/* What to change */}
+      {result.what_to_change.length > 0 && (
+        <div className="rounded-2xl border border-line overflow-hidden">
+          <div className="px-6 py-4 bg-amber-50/60 text-amber-900 flex items-center gap-2">
+            <span className="text-sm font-semibold">⚠</span>
+            <p className="font-medium text-sm">What to change</p>
+          </div>
+          <div className="divide-y divide-line">
+            {result.what_to_change.map((item, i) => (
+              <div key={i} className="px-6 py-5 space-y-1.5">
+                <p className="font-medium text-ink text-sm">{item.step}</p>
+                <p className="text-sm text-amber-800 leading-relaxed">{item.issue}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.suggestion}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* What's missing */}
+      {result.whats_missing.length > 0 && (
+        <ReviewSection
+          title="What's missing"
+          color="blue"
+          icon="+"
+          items={result.whats_missing.map((m) => ({ heading: m.category, body: m.why }))}
+        />
+      )}
+
+      {/* Ingredient conflicts */}
+      {result.ingredient_conflicts.length > 0 && (
+        <div className="rounded-2xl border border-red-100 overflow-hidden">
+          <div className="px-6 py-4 bg-red-50/70 text-red-900 flex items-center gap-2">
+            <span className="text-sm font-semibold">✕</span>
+            <p className="font-medium text-sm">Ingredient conflicts</p>
+          </div>
+          <div className="divide-y divide-line">
+            {result.ingredient_conflicts.map((conflict, i) => (
+              <div key={i} className="px-6 py-5 space-y-1.5">
+                <div className="flex flex-wrap gap-1.5">
+                  {conflict.ingredients.map((ing) => (
+                    <span key={ing} className="text-xs bg-red-100 text-red-800 rounded-full px-2.5 py-1 font-medium">
+                      {ing}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">{conflict.issue}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Learn more */}
+      {result.learn_more_topics.length > 0 && (
+        <LearnMoreSection topics={result.learn_more_topics} />
+      )}
+
+      {/* Actions */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-line">
+        <button
+          onClick={onReset}
+          className="flex-1 text-sm font-medium py-2.5 px-4 rounded-full border border-line text-muted hover:text-ink hover:border-ink transition-colors"
+        >
+          Start over
+        </button>
+      </div>
+
+      <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-xs text-blue-800 leading-relaxed space-y-1">
+        <p className="font-semibold">This is educational information, not medical advice.</p>
+        <p>
+          These recommendations are based on published skincare research and are intended to help you
+          make informed decisions — not to replace professional guidance. For persistent skin concerns,
+          consult a board-certified dermatologist.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+interface ReviewSectionItem { heading: string; body: string }
+interface ReviewSectionProps {
+  title: string
+  color: 'emerald' | 'blue'
+  icon: string
+  items: ReviewSectionItem[]
+}
+
+function ReviewSection({ title, color, icon, items }: ReviewSectionProps) {
+  const headerClass = color === 'emerald'
+    ? 'bg-emerald-50/70 text-emerald-900'
+    : 'bg-blue-50/60 text-blue-900'
+
+  return (
+    <div className="rounded-2xl border border-line overflow-hidden">
+      <div className={`px-6 py-4 flex items-center gap-2 ${headerClass}`}>
+        <span className="text-sm font-semibold">{icon}</span>
+        <p className="font-medium text-sm">{title}</p>
+      </div>
+      <div className="divide-y divide-line">
+        {items.map((item, i) => (
+          <div key={i} className="px-6 py-5 space-y-1">
+            <p className="font-medium text-ink text-sm">{item.heading}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{item.body}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
